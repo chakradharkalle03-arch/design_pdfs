@@ -52,7 +52,7 @@ def get_base_url(request: Request) -> str:
 async def view_catalog(request: Request, category: Optional[str] = None):
     settings = db.get_settings()
     designs = db.get_all_designs(category=category, only_active=True)
-    categories = ["All", "Computer Embroidery", "Bridal Heavy", "Sleeve Design", "Cutwork", "Neck Design", "Simple Work", "Floral Work"]
+    categories = ["All", "Computer Embroidery", "Kolam / Muggu Work", "Bridal Heavy", "Sleeve Design", "Cutwork", "Neck Design", "Simple Work", "Floral Work"]
     return templates.TemplateResponse(request, "catalog.html", {
         "settings": settings,
         "designs": designs,
