@@ -52,7 +52,7 @@ def get_base_url(request: Request) -> str:
 async def view_catalog(request: Request, category: Optional[str] = None):
     settings = db.get_settings()
     designs = db.get_all_designs(category=category, only_active=True)
-    categories = ["All", "Maggam Work", "Bridal Heavy", "Aari Work", "Sleeve Design", "Cutwork", "Neck Design", "Simple Work"]
+    categories = ["All", "Computer Embroidery", "Bridal Heavy", "Sleeve Design", "Cutwork", "Neck Design", "Simple Work", "Floral Work"]
     return templates.TemplateResponse(request, "catalog.html", {
         "settings": settings,
         "designs": designs,
@@ -112,7 +112,7 @@ async def api_get_design_by_id(design_id: int):
 @app.post("/api/designs/upload")
 async def api_upload_designs(
     files: List[UploadFile] = File(...),
-    category: str = Form("Maggam Work"),
+    category: str = Form("Computer Embroidery"),
     title: Optional[str] = Form(None),
     code_prefix: str = Form("BL"),
     description: Optional[str] = Form(""),

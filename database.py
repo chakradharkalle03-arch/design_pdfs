@@ -73,7 +73,7 @@ def init_db():
     # Default settings
     default_settings = {
         "business_name": "Akshaya Blouse Embroidery Studio",
-        "tagline": "Exclusive Handcrafted & Maggam Embroidery Designs for Designer Blouses",
+        "tagline": "Exclusive Computerized Machine Embroidery Designs for Designer Blouses",
         "whatsapp_number": "917075101007",
         "owner_email": "kallechakri022@gmail.com",
         "admin_pin": "1439",
@@ -91,14 +91,14 @@ def init_db():
         sample_designs = [
             (
                 "BL-101",
-                "Royal Peacock Maggam Back Neck",
-                "Maggam Work",
-                "Exquisite handcrafted bridal maggam design featuring regal peacock motifs with gold zari, antique beads, and kundan stone embellishment.",
+                "Royal Peacock Computer Embroidery Back Neck",
+                "Computer Embroidery",
+                "Exquisite precision machine embroidery design featuring regal peacock motifs with gold zari, antique beads, and kundan stone embellishment.",
                 "uploads/designs/BL-101_peacock_maggam.jpg",
                 "uploads/designs/thumb_BL-101_peacock_maggam.jpg",
                 "sample_embroidery_catalog.pdf",
                 1,
-                "peacock, bridal, maroon, maggam, gold zari"
+                "peacock, bridal, maroon, computer embroidery, machine, gold zari"
             ),
             (
                 "BL-102",
@@ -134,18 +134,18 @@ def init_db():
     if cursor.fetchone()["cnt"] == 0:
         sample_finished = [
             (
-                "Royal Peacock Maggam Work on Crimson Silk Blouse",
+                "Royal Peacock Machine Embroidery on Crimson Silk Blouse",
                 "Pure Dharmavaram Silk",
                 "BL-101",
-                "Real finished customer blouse. Handcrafted gold zari peacock motif with antique metal beads, ruby stones, and grand bridal back neck finish.",
+                "Real finished customer blouse. High-speed precision machine embroidery with gold zari peacock motif, antique metal beads, ruby stones, and grand bridal back neck finish.",
                 "uploads/designs/BL-101_peacock_maggam.jpg",
                 "uploads/designs/thumb_BL-101_peacock_maggam.jpg"
             ),
             (
-                "Sacred Lotus & Mango Paisley Zardosi Elbow Sleeve",
+                "Sacred Lotus & Mango Paisley Computer Embroidery Sleeve",
                 "Kanchipuram Pattu Saree Blouse",
                 "BL-102",
-                "Real finished sleeve embroidery. Elbow-length sleeve with dense gold zardosi embroidery, hanging pearls, and floral buttas.",
+                "Real finished sleeve embroidery. Elbow-length sleeve with dense machine zardosi embroidery, hanging pearls, and floral buttas.",
                 "uploads/designs/BL-102_lotus_sleeve.jpg",
                 "uploads/designs/thumb_BL-102_lotus_sleeve.jpg"
             ),

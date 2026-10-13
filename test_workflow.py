@@ -49,7 +49,7 @@ def test_endpoints():
                 "code_prefix": "CAT",
                 "title": "Bridal Catalog 2026",
                 "description": "Exclusive bridal designs extracted from multi-page catalog PDF",
-                "tags": "bridal, gold, maggam, catalog"
+                "tags": "bridal, gold, machine embroidery, catalog"
             }
         )
     assert r.status_code == 200

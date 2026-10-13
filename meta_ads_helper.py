@@ -33,7 +33,7 @@ def generate_meta_catalog_xml(base_url: str) -> str:
     link.text = base_url
     
     desc = ET.SubElement(channel, 'description')
-    desc.text = "Handcrafted Maggam Work & Blouse Embroidery Designs in Dharmavaram, Sri Sathya Sai District"
+    desc.text = "Computerized Machine Embroidery & Blouse Designs in Dharmavaram, Sri Sathya Sai District"
     
     for d in designs:
         item = ET.SubElement(channel, 'item')
@@ -104,8 +104,8 @@ def get_radius_campaign_data(radius_km: int = 10, lat: float = None, lng: float 
             "interests": [
                 "Dharmavaram Silk Sarees",
                 "Sari / Saree",
-                "Maggam Work",
-                "Aari Work",
+                "Computer Embroidery",
+                "Machine Embroidery",
                 "Bridal Embroidery",
                 "Indian Wedding Wear"
             ]

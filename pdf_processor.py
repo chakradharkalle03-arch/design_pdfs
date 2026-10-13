@@ -82,7 +82,7 @@ def process_pdf_file(pdf_file_path, original_filename, base_code_prefix="BL", ca
     doc.close()
     return results
 
-def process_image_file(image_file_path, original_filename, custom_code=None, title=None, category="Maggam Work", description="", tags=""):
+def process_image_file(image_file_path, original_filename, custom_code=None, title=None, category="Computer Embroidery", description="", tags=""):
     """
     Takes an uploaded image file (JPG, PNG, WEBP), optimizes it, generates thumbnail,
     and returns design metadata dict.

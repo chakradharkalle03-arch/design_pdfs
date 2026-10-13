@@ -255,7 +255,7 @@ function shareViaWhatsAppNative() {
   const url = document.getElementById('shareCatalogUrl').value;
   const msg = 
 `Namaste! 🙏
-Browse our latest *Blouse Embroidery & Maggam Work* designs here:
+Browse our latest *Computerized Blouse Embroidery* designs here:
 👉 ${url}
 
 You can select designs, upload your blouse cloth photo, and submit directly! ✨`;
@@ -464,7 +464,7 @@ function renderAdMockup() {
 
   const igCaption = document.getElementById('previewCaptionText');
   if (igCaption) {
-    igCaption.innerHTML = `✨ Royal handcrafted <strong>${d.title}</strong> (${d.code}) in ${currentLiveLocation.name}! Hand-stitched Maggam &amp; Aari embroidery for silk saree blouses. Bring your blouse cloth for custom matching. WhatsApp: <strong>7075101007</strong>. Tap 'Shop Now' to view design! #DharmavaramSilk #BlouseEmbroidery #${d.code} #MaggamWork`;
+    igCaption.innerHTML = `✨ Royal precision <strong>${d.title}</strong> (${d.code}) in ${currentLiveLocation.name}! High-speed Computerized Machine Embroidery for silk saree blouses. Bring your blouse cloth for custom matching. WhatsApp: <strong>7075101007</strong>. Tap 'Shop Now' to view design! #DharmavaramSilk #BlouseEmbroidery #${d.code} #MachineEmbroidery #ComputerEmbroidery`;
   }
 
   const igTimeLoc = document.getElementById('previewTimeLocation');
@@ -480,7 +480,7 @@ function renderAdMockup() {
   if (storyLoc) storyLoc.innerText = `Sponsored • ${currentLiveLocation.name}`;
 
   const storyBadge = document.getElementById('storyDesignCodeBadge');
-  if (storyBadge) storyBadge.innerText = `DESIGN: ${d.code} • ${(d.category || 'MAGGAM WORK').toUpperCase()}`;
+  if (storyBadge) storyBadge.innerText = `DESIGN: ${d.code} • ${(d.category || 'COMPUTER EMBROIDERY').toUpperCase()}`;
 
   const storyTitle = document.getElementById('storyDesignTitleText');
   if (storyTitle) storyTitle.innerText = d.title;
@@ -499,7 +499,7 @@ function renderAdMockup() {
 
   const fbCap = document.getElementById('fbCaptionText');
   if (fbCap) {
-    fbCap.innerHTML = `✨ Handcrafted Bridal Maggam &amp; Blouse Embroidery in ${currentLiveLocation.name}! Bring your own blouse material or choose custom patterns. WhatsApp: <strong>7075101007</strong> for orders. 🌸 Design: ${d.title} (${d.code}).`;
+    fbCap.innerHTML = `✨ Precision Computerized Blouse Embroidery in ${currentLiveLocation.name}! Bring your own blouse material or choose custom patterns. WhatsApp: <strong>7075101007</strong> for orders. 🌸 Design: ${d.title} (${d.code}).`;
   }
 
   const fbLinkTitle = document.getElementById('fbLinkTitle');
@@ -520,15 +520,15 @@ function copyAdCaption() {
   if (!d) return;
 
   const baseUrl = (window.ADMIN_CONFIG && window.ADMIN_CONFIG.baseUrl) ? window.ADMIN_CONFIG.baseUrl : 'http://localhost:8000';
-  const text = `✨ Exclusive Handcrafted Blouse Embroidery & Maggam Work in ${currentLiveLocation.name}!
+  const text = `✨ Exclusive Computerized Blouse Machine Embroidery in ${currentLiveLocation.name}!
 🌸 Design: ${d.title} (Code: ${d.code})
 👗 Category: ${d.category}
 
 👉 View Online: ${baseUrl}/?select=${d.code}
 📱 Order on WhatsApp: https://wa.me/917075101007?text=Hi!+I+want+to+order+design+${d.code}
 
-Bring your blouse fabric and get royal custom matching embroidery!
-#DharmavaramSilk #BlouseEmbroidery #MaggamWork #BridalBlouse #${d.code}`;
+Bring your blouse fabric and get precision computer machine embroidery!
+#DharmavaramSilk #BlouseEmbroidery #MachineEmbroidery #ComputerEmbroidery #BridalBlouse #${d.code}`;
 
   navigator.clipboard.writeText(text).then(() => {
     alert(`✅ Ad Caption for design ${d.code} copied to clipboard!\n\nYou can paste it directly onto Instagram, Facebook, or WhatsApp.`);
@@ -611,7 +611,7 @@ function downloadBrandedAdImage(format) {
     ctx.fillStyle = '#FFFFFF';
     ctx.font = 'bold 32px "Plus Jakarta Sans", sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText(`CODE: ${d.code} • ${(d.category || 'MAGGAM WORK').toUpperCase()}`, imgX + 24, ribbonY + 46);
+    ctx.fillText(`CODE: ${d.code} • ${(d.category || 'COMPUTER EMBROIDERY').toUpperCase()}`, imgX + 24, ribbonY + 46);
 
     ctx.fillStyle = '#F4E7BD';
     ctx.font = '22px "Plus Jakarta Sans", sans-serif';
@@ -632,7 +632,7 @@ function downloadBrandedAdImage(format) {
 
     ctx.font = 'bold 26px "Plus Jakarta Sans", sans-serif';
     ctx.fillStyle = '#062612';
-    ctx.fillText('✨ Handcrafted Maggam Embroidery • Bring Your Blouse Cloth ✨', W / 2, footerY + (isStory ? 140 : 110));
+    ctx.fillText('✨ Precision Machine Embroidery • Bring Your Blouse Cloth ✨', W / 2, footerY + (isStory ? 140 : 110));
 
     if (isStory) {
       ctx.fillStyle = '#FFFFFF';

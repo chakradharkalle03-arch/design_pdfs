@@ -10,7 +10,7 @@ Solve your phone storage problem: instead of sending huge PDF files and photos o
 
 ### 1. 📱 For Customers (Mobile-First Experience)
 - **Fast, Lightweight Catalog:** Browse embroidery designs without downloading heavy files to phone storage.
-- **Smart Filters & Search:** Filter by Maggam Work, Bridal Heavy, Aari Work, Sleeve Designs, Cutwork, etc., or search by design code (e.g., `BL-101`) or keywords.
+- **Smart Filters & Search:** Filter by Computer Embroidery, Bridal Heavy, Floral Work, Sleeve Designs, Cutwork, etc., or search by design code (e.g., `BL-101`) or keywords.
 - **High-Definition Previews:** Tap any design to zoom into intricate zari, bead, and stone details.
 - **Select Designs:** Tap ❤️ to choose designs and see a floating order counter.
 - **Blouse Material Photo Upload:** Customers can take a photo of their unstitched blouse cloth or saree border directly with their phone camera so you can match the perfect thread, zari, and bead colors!

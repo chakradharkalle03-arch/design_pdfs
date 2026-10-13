@@ -85,7 +85,7 @@ async def view_order_summary(request: Request, order_code: str):
 @app.post("/api/designs/upload")
 async def api_upload_designs(
     files: List[UploadFile] = File(...),
-    category: str = Form("Maggam Work"),
+    category: str = Form("Computer Embroidery"),
     title: Optional[str] = Form(None),
     code_prefix: str = Form("BL"),
     description: Optional[str] = Form(""),

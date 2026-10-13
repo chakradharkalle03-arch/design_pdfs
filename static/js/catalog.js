@@ -378,7 +378,7 @@ function shareDirectWhatsApp() {
 `🌸 *${bizName}* 🌸
 Namaste! 🙏
 
-Browse our latest *Blouse Embroidery & Maggam Work* designs catalog here:
+Browse our latest *Computerized Blouse Embroidery* designs catalog here:
 👉 ${url}
 
 ✨ How to order:
