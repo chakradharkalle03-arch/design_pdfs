@@ -204,6 +204,9 @@
       <button class="admin-tab-btn" onclick="switchTab('designsTab')">
         <i class="fa-solid fa-images"></i> Manage Catalog (<span id="tabDesignBadge">{{ designs|length }}</span>)
       </button>
+      <button class="admin-tab-btn" onclick="switchTab('portfolioTab')">
+        <i class="fa-solid fa-award" style="color: #D4AF37;"></i> Real Finished Blouses (<span id="tabPortfolioBadge">{{ finished_blouses|length }}</span>)
+      </button>
       <button class="admin-tab-btn" onclick="switchTab('shareTab')">
         <i class="fa-solid fa-share-nodes"></i> WhatsApp Share & QR Code
       </button>
@@ -461,6 +464,163 @@
           {% endfor %}
         </tbody>
       </table>
+    </section>
+
+    <!-- TAB: REAL FINISHED BLOUSES GALLERY (WORK QUALITY PROOF) -->
+    <section id="portfolioTab" class="admin-tab-content">
+      
+      <!-- Top Overview Banner -->
+      <div style="background: linear-gradient(135deg, #4A0E17 0%, #6B1724 100%); color: #FFF; padding: 20px 24px; border-radius: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; box-shadow: 0 6px 20px rgba(107, 23, 36, 0.25); border: 1.5px solid #D4AF37;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.5rem; color: #F4E7BD;"><i class="fa-solid fa-award"></i></span>
+            <h2 style="font-size: 1.35rem; font-weight: 800; color: #FFF; margin: 0;">Real Finished Blouses (Quality Proof &amp; Work References)</h2>
+          </div>
+          <p style="font-size: 0.88rem; color: #F8F5EE; margin-top: 6px; max-width: 780px; line-height: 1.4;">
+            Upload photos of real customer blouses that you have already printed, embroidered, or stitched. Customers on the Customer Store can view these as proof of your neat finishing, zari quality, and stone work, giving them 100% trust to order!
+          </p>
+        </div>
+        <a href="http://localhost:8000" target="_blank" class="btn-proceed" style="background: var(--gold-gradient); color: #381A05; border: none; font-weight: 800; padding: 10px 18px; text-decoration: none; font-size: 0.85rem;">
+          <i class="fa-solid fa-eye"></i> View on Customer Store (Port 8000)
+        </a>
+      </div>
+
+      <!-- 2-Column Grid: Upload Form + Gallery Showcase -->
+      <div style="display: grid; grid-template-columns: 380px 1fr; gap: 24px;">
+        
+        <!-- Column 1: Upload Real Blouse Form -->
+        <div style="background: #FFF; padding: 24px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); height: fit-content;">
+          <h3 style="font-size: 1.15rem; color: var(--primary); font-weight: 700; margin-bottom: 6px;">
+            <i class="fa-solid fa-camera" style="color: #6B1724;"></i> Add Finished Blouse Photo
+          </h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;">
+            Take a clear photo of an embroidered blouse from your shop and upload it here:
+          </p>
+
+          <form onsubmit="submitFinishedBlouseUpload(event)" id="finishedBlouseForm">
+            <!-- File Input -->
+            <div class="form-group">
+              <label class="form-label">Blouse Photo <span class="req">*</span></label>
+              <input type="file" id="finishedBlouseFile" class="form-input" accept="image/*" required onchange="previewFinishedBlouseImage(event)">
+              <div id="finishedBlousePreviewWrap" style="margin-top: 10px; display: none; text-align: center;">
+                <img id="finishedBlousePreviewImg" src="" style="width: 100%; height: 160px; object-fit: cover; border-radius: 8px; border: 1.5px solid #D4AF37;">
+              </div>
+            </div>
+
+            <!-- Title -->
+            <div class="form-group">
+              <label class="form-label">Title / Blouse Description <span class="req">*</span></label>
+              <input type="text" id="finishedBlouseTitle" class="form-input" placeholder="e.g. Royal Peacock Maggam on Red Silk" required>
+            </div>
+
+            <!-- Fabric Type -->
+            <div class="form-group">
+              <label class="form-label">Saree / Fabric Material</label>
+              <input type="text" id="finishedBlouseFabric" class="form-input" placeholder="e.g. Pure Dharmavaram Silk, Kanchi Pattu..." list="fabricSuggestions">
+              <datalist id="fabricSuggestions">
+                <option value="Pure Dharmavaram Silk">
+                <option value="Kanchipuram Pattu Saree Blouse">
+                <option value="Banarasi Brocade Silk">
+                <option value="Raw Silk Bridal Blouse">
+                <option value="Chanderi Silk / Cotton Silk">
+                <option value="Tissue Silk Festive Blouse">
+              </datalist>
+            </div>
+
+            <!-- Design Reference Code -->
+            <div class="form-group">
+              <label class="form-label">Catalog Design Code Reference (Optional)</label>
+              <input type="text" id="finishedBlouseDesignRef" class="form-input" placeholder="e.g. BL-101 or CAT-973B74">
+            </div>
+
+            <!-- Notes / Details -->
+            <div class="form-group">
+              <label class="form-label">Crafting Details / Materials Used</label>
+              <textarea id="finishedBlouseDesc" class="form-textarea" rows="2" placeholder="e.g. Handcrafted with gold zari, antique sugar beads, and ruby kundan stones."></textarea>
+            </div>
+
+            <button type="submit" id="btnUploadFinishedBlouse" class="btn-proceed" style="width: 100%; justify-content: center; font-size: 0.92rem; padding: 12px; cursor: pointer;">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Upload to Quality Showcase
+            </button>
+            <div id="uploadFinishedProgress" style="display: none; text-align: center; margin-top: 10px; font-size: 0.85rem; color: var(--primary);">
+              <i class="fa-solid fa-spinner fa-spin"></i> Processing &amp; Optimizing image...
+            </div>
+          </form>
+        </div>
+
+        <!-- Column 2: Gallery Showcase of Existing Finished Blouses -->
+        <div>
+          <div style="background: #FFF; padding: 22px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <h3 style="font-size: 1.2rem; color: var(--primary); font-weight: 700;">
+                  Existing Real Finished Blouses (<span id="finishedBlousesCount">{{ finished_blouses|length }}</span>)
+                </h3>
+                <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">
+                  These photos appear in the Customer Store to show customers your high-quality stitching:
+                </p>
+              </div>
+              <button onclick="window.location.reload()" class="btn-select" style="width: auto; padding: 6px 14px; font-size: 0.82rem; cursor: pointer;">
+                <i class="fa-solid fa-rotate"></i> Refresh
+              </button>
+            </div>
+
+            <!-- Grid of Finished Blouses -->
+            <div id="finishedBlousesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px;">
+              {% for b in finished_blouses %}
+              <div class="order-item-wrap" id="finished-card-{{ b.id }}" style="padding: 14px; margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between; position: relative;">
+                <div>
+                  <div style="position: relative; width: 100%; height: 190px; border-radius: 10px; overflow: hidden; background: #FAF8F5; margin-bottom: 10px; border: 1px solid #EFE8DA;">
+                    <a href="/{{ b.image_path }}" target="_blank">
+                      <img src="/{{ b.thumb_path or b.image_path }}" alt="{{ b.title }}" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" title="Click to view full size">
+                    </a>
+                    <span style="position: absolute; top: 8px; left: 8px; background: rgba(39, 174, 96, 0.95); color: #FFF; font-size: 0.7rem; font-weight: 700; padding: 3px 8px; border-radius: 12px;">
+                      <i class="fa-solid fa-circle-check"></i> Quality Proof
+                    </span>
+                    {% if b.design_code_ref %}
+                    <span style="position: absolute; bottom: 8px; left: 8px; background: rgba(107, 23, 36, 0.9); color: #FFF; font-size: 0.7rem; font-weight: 700; padding: 2px 7px; border-radius: 8px;">
+                      Ref: {{ b.design_code_ref }}
+                    </span>
+                    {% endif %}
+                  </div>
+
+                  <h4 style="font-size: 0.92rem; font-weight: 700; color: var(--primary); margin-bottom: 4px; line-height: 1.3;">
+                    {{ b.title }}
+                  </h4>
+                  <div style="font-size: 0.78rem; color: #B8860B; font-weight: 700; margin-bottom: 6px;">
+                    <i class="fa-solid fa-gem"></i> {{ b.fabric_type or 'Pure Silk Blouse' }}
+                  </div>
+                  {% if b.description %}
+                  <p style="font-size: 0.78rem; color: #555; line-height: 1.35; margin-bottom: 8px;">
+                    {{ b.description }}
+                  </p>
+                  {% endif %}
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #F0ECE4; padding-top: 10px; margin-top: 10px;">
+                  <span style="font-size: 0.72rem; color: #999;">
+                    <i class="fa-regular fa-clock"></i> {{ b.created_at[:10] if b.created_at else '' }}
+                  </span>
+                  <button onclick="deleteFinishedBlouse('{{ b.id }}')" style="background: none; border: 1px solid #F5C6CB; color: #721C24; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                    <i class="fa-solid fa-trash"></i> Delete
+                  </button>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+
+            {% if not finished_blouses %}
+            <div style="text-align: center; padding: 50px 20px; color: #999;">
+              <i class="fa-solid fa-shirt" style="font-size: 3rem; color: #E5DFD3; margin-bottom: 12px;"></i>
+              <h4>No finished blouses uploaded yet</h4>
+              <p style="font-size: 0.85rem; margin-top: 4px;">Use the form on the left to upload your first finished blouse photo!</p>
+            </div>
+            {% endif %}
+
+          </div>
+        </div>
+
+      </div>
     </section>
 
     <!-- TAB 4: WHATSAPP SHARE & QR CODE -->

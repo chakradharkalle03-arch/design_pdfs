@@ -43,6 +43,9 @@
         </div>
         
         <div class="header-actions">
+          <button onclick="openPortfolioModal()" class="btn-header" style="background: rgba(212,175,55,0.25); border: 1.5px solid #D4AF37; color: #FFF; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-award" style="color: #F4E7BD;"></i> Real Finished Blouses Proof (<span id="portfolioCountBadge">{{ finished_blouses|length }}</span>)
+          </button>
           {% if settings.whatsapp_number %}
           <a href="https://wa.me/{{ settings.whatsapp_number }}?text=Hello!%20I%20want%20to%20inquire%20about%20blouse%20embroidery%20designs" 
              target="_blank" class="btn-header btn-whatsapp-header">
@@ -65,6 +68,10 @@
 
       <!-- Category Filter Pills -->
       <div class="category-scroll" id="categoryContainer">
+        <div class="cat-pill cat-pill-portfolio" onclick="openPortfolioModal()" style="border: 1.5px solid #D4AF37; background: #FAF5EB; color: #6B1724; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+          <i class="fa-solid fa-gem" style="color: #D4AF37;"></i> <span>Real Blouses Finished (Proof)</span>
+          <span style="background: #6B1724; color: #FFF; font-size: 0.72rem; padding: 1px 6px; border-radius: 10px;">{{ finished_blouses|length }}</span>
+        </div>
         {% for cat in categories %}
         <div class="cat-pill {% if cat == current_category %}active{% endif %}" data-category="{{ cat }}">
           {{ cat }}
@@ -76,6 +83,24 @@
 
   <!-- Design Catalog Grid -->
   <main class="container">
+    <!-- Quality Proof Banner for Customer Trust -->
+    <div style="background: linear-gradient(135deg, #FAF5EB 0%, #F5EEDB 100%); border: 1.5px solid #D4AF37; border-radius: 14px; padding: 14px 18px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; box-shadow: var(--shadow-sm);">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width: 42px; height: 42px; border-radius: 50%; background: #6B1724; color: #F4E7BD; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">
+          <i class="fa-solid fa-certificate"></i>
+        </div>
+        <div>
+          <strong style="color: #6B1724; font-size: 0.96rem;">Want to inspect our real embroidery quality &amp; neat finishing?</strong>
+          <div style="font-size: 0.8rem; color: #665A5B; margin-top: 2px;">
+            See {{ finished_blouses|length }} real customer blouses already stitched &amp; embroidered by our studio on pure silk sarees.
+          </div>
+        </div>
+      </div>
+      <button onclick="openPortfolioModal()" class="btn-proceed" style="padding: 8px 16px; font-size: 0.84rem; width: auto; cursor: pointer;">
+        <i class="fa-solid fa-award"></i> View Real Finished Blouses Proof ({{ finished_blouses|length }})
+      </button>
+    </div>
+
     <div class="catalog-grid" id="catalogGrid">
       {% for design in designs %}
       <div class="design-card" 
@@ -247,6 +272,69 @@
           <i class="fa-solid fa-heart"></i>
           <span>Select This Design</span>
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Real Finished Blouses Quality Showcase -->
+  <div class="modal-overlay" id="portfolioModal">
+    <div class="modal-card" style="max-width: 960px; width: 95%; max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header" style="background: linear-gradient(135deg, #4A0E17 0%, #6B1724 100%); color: #FFF;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-award" style="color: #F4E7BD; font-size: 1.4rem;"></i>
+            <h2 class="modal-title font-serif" style="color: #FFF; font-size: 1.35rem; margin: 0;">Real Finished Blouses (Quality Proof &amp; References)</h2>
+          </div>
+          <p style="font-size: 0.82rem; color: #F4E7BD; margin-top: 4px;">
+            Real customer blouses crafted &amp; stitched by Akshaya Studio on pure silk sarees. Inspect our neat zari work, stones, and embroidery finish!
+          </p>
+        </div>
+        <button class="btn-modal-close" style="color: #FFF;" onclick="closePortfolioModal()">&times;</button>
+      </div>
+
+      <div class="modal-body" style="padding: 22px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 20px;" id="portfolioGrid">
+          {% for b in finished_blouses %}
+          <div style="background: #FFFFFF; border: 1.5px solid #EAE3D5; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="position: relative; width: 100%; height: 210px; background: #FAF8F5; overflow: hidden;">
+                <img src="/{{ b.image_path }}" alt="{{ b.title }}" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" onclick="openZoomImage('/{{ b.image_path }}', '{{ b.title }}', '{{ b.fabric_type }} - Real Finished Work')">
+                <span style="position: absolute; top: 8px; left: 8px; background: #27AE60; color: #FFF; font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+                  <i class="fa-solid fa-circle-check"></i> 100% Real Work
+                </span>
+                {% if b.design_code_ref %}
+                <span style="position: absolute; bottom: 8px; left: 8px; background: rgba(107, 23, 36, 0.9); color: #FFF; font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 6px;">
+                  Code: {{ b.design_code_ref }}
+                </span>
+                {% endif %}
+              </div>
+              <div style="padding: 12px 14px 6px 14px;">
+                <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-bottom: 4px; line-height: 1.3;">{{ b.title }}</h3>
+                <div style="font-size: 0.78rem; font-weight: 700; color: #B8860B; margin-bottom: 6px;">
+                  <i class="fa-solid fa-gem"></i> {{ b.fabric_type or 'Pure Silk Blouse' }}
+                </div>
+                {% if b.description %}
+                <p style="font-size: 0.8rem; color: #555; line-height: 1.4; margin-bottom: 8px;">{{ b.description }}</p>
+                {% endif %}
+              </div>
+            </div>
+
+            <div style="padding: 10px 14px 14px 14px;">
+              <a href="https://wa.me/{{ settings.whatsapp_number }}?text=Namaste%20Akshaya%20Studio!%20I%20saw%20your%20finished%20blouse%20photo%20'{{ b.title }}'%20on%20your%20website.%20I%20want%20similar%20embroidery%20on%20my%20blouse%20cloth!" target="_blank" class="btn-whatsapp-send" style="padding: 9px 12px; font-size: 0.82rem; text-decoration: none; width: 100%; display: flex; justify-content: center; align-items: center; gap: 6px;">
+                <i class="fa-brands fa-whatsapp"></i>
+                <span>Order Similar on WhatsApp</span>
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        {% if not finished_blouses %}
+        <div style="text-align: center; padding: 50px 20px; color: #888;">
+          <i class="fa-solid fa-shirt" style="font-size: 2.5rem; color: #DDD; margin-bottom: 10px;"></i>
+          <p>No finished blouses posted yet. Please check back soon!</p>
+        </div>
+        {% endif %}
       </div>
     </div>
   </div>

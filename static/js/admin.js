@@ -888,4 +888,94 @@ function copyMetaFeedUrl() {
   });
 }
 
+// --- Real Finished Blouses Showcase Logic ---
+function previewFinishedBlouseImage(event) {
+  const file = event.target.files[0];
+  const wrap = document.getElementById('finishedBlousePreviewWrap');
+  const img = document.getElementById('finishedBlousePreviewImg');
+  if (file && wrap && img) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      img.src = e.target.result;
+      wrap.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+async function submitFinishedBlouseUpload(event) {
+  event.preventDefault();
+  const fileInput = document.getElementById('finishedBlouseFile');
+  if (!fileInput.files || fileInput.files.length === 0) {
+    alert('Please select a photo of the finished blouse to upload');
+    return;
+  }
+
+  const title = document.getElementById('finishedBlouseTitle').value.trim();
+  const fabric = document.getElementById('finishedBlouseFabric').value.trim();
+  const designRef = document.getElementById('finishedBlouseDesignRef').value.trim();
+  const desc = document.getElementById('finishedBlouseDesc').value.trim();
+
+  const btn = document.getElementById('btnUploadFinishedBlouse');
+  const progress = document.getElementById('uploadFinishedProgress');
+
+  btn.disabled = true;
+  btn.style.display = 'none';
+  progress.style.display = 'block';
+
+  try {
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    formData.append('title', title);
+    formData.append('fabric_type', fabric);
+    formData.append('design_code_ref', designRef);
+    formData.append('description', desc);
+
+    const res = await fetch('/api/finished-blouses/upload', {
+      method: 'POST',
+      body: formData
+    });
+    const result = await res.json();
+    if (result.success) {
+      alert('✨ Success! Added real finished blouse to quality showcase.');
+      window.location.hash = '#portfolioTab';
+      window.location.reload();
+    } else {
+      alert('Upload failed: ' + (result.message || 'Unknown error'));
+      btn.disabled = false;
+      btn.style.display = 'flex';
+      progress.style.display = 'none';
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Upload failed. Please check network connection.');
+    btn.disabled = false;
+    btn.style.display = 'flex';
+    progress.style.display = 'none';
+  }
+}
+
+async function deleteFinishedBlouse(blouseId) {
+  if (!confirm('Are you sure you want to delete this finished blouse photo?')) return;
+
+  try {
+    const res = await fetch(`/api/finished-blouses/${blouseId}`, {
+      method: 'DELETE'
+    });
+    const result = await res.json();
+    if (result.success) {
+      const card = document.getElementById(`finished-card-${blouseId}`);
+      if (card) card.remove();
+      const countEl = document.getElementById('finishedBlousesCount');
+      const badgeEl = document.getElementById('tabPortfolioBadge');
+      if (countEl) countEl.innerText = Math.max(0, parseInt(countEl.innerText || '1') - 1);
+      if (badgeEl) badgeEl.innerText = Math.max(0, parseInt(badgeEl.innerText || '1') - 1);
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Failed to delete finished blouse');
+  }
+}
+
+
 

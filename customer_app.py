@@ -45,10 +45,12 @@ def get_base_url(request: Request) -> str:
 async def view_catalog(request: Request, category: Optional[str] = None):
     settings = db.get_settings()
     designs = db.get_all_designs(category=category, only_active=True)
+    finished_blouses = db.get_all_finished_blouses(only_active=True)
     categories = ["All", "Maggam Work", "Bridal Heavy", "Aari Work", "Sleeve Design", "Cutwork", "Neck Design", "Simple Work"]
     return templates.TemplateResponse(request, "catalog.html", {
         "settings": settings,
         "designs": designs,
+        "finished_blouses": finished_blouses,
         "categories": categories,
         "current_category": category or "All",
         "base_url": get_base_url(request)
@@ -74,6 +76,11 @@ async def view_order_summary(request: Request, order_code: str):
 async def api_get_designs(category: Optional[str] = None, search: Optional[str] = None):
     designs = db.get_all_designs(category=category, search=search, only_active=True)
     return {"success": True, "count": len(designs), "designs": designs}
+
+@app.get("/api/finished-blouses")
+async def api_get_customer_finished_blouses():
+    items = db.get_all_finished_blouses(only_active=True)
+    return {"success": True, "count": len(items), "finished_blouses": items}
 
 @app.post("/api/orders")
 async def api_create_order(

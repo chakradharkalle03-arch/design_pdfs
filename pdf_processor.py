@@ -146,3 +146,25 @@ def save_customer_blouse_image(file_bytes, filename):
         img.save(dest_path, "JPEG", quality=85, optimize=True)
         
     return f"uploads/blouses/{saved_filename}"
+
+def save_finished_blouse_image(file_bytes, filename):
+    """
+    Saves an uploaded finished blouse photo and its thumbnail, returning (image_path, thumb_path).
+    """
+    unique_id = uuid.uuid4().hex[:8].upper()
+    img_filename = f"finished_{unique_id}.jpg"
+    thumb_filename = f"thumb_{img_filename}"
+    
+    dest_path = os.path.join(BLOUSES_DIR, img_filename)
+    dest_thumb_path = os.path.join(BLOUSES_DIR, thumb_filename)
+    
+    import io
+    with Image.open(io.BytesIO(file_bytes)) as img:
+        if img.mode in ("RGBA", "P"):
+            img = img.convert("RGB")
+        img.thumbnail((1600, 1600), Image.Resampling.LANCZOS)
+        img.save(dest_path, "JPEG", quality=88, optimize=True)
+        
+    make_thumbnail(dest_path, dest_thumb_path, max_size=(500, 500))
+    return f"uploads/blouses/{img_filename}", f"uploads/blouses/{thumb_filename}"
+

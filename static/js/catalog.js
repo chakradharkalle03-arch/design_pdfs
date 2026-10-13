@@ -204,6 +204,8 @@ function updateZoomModalButton() {
 function closeZoomModal() {
   document.getElementById('zoomModal').classList.remove('active');
   currentZoomId = null;
+  const selectBtn = document.getElementById('zoomModalSelectBtn');
+  if (selectBtn) selectBtn.style.display = 'inline-flex';
 }
 
 // Order Modal & Blouse Upload
@@ -387,4 +389,40 @@ Browse our latest *Blouse Embroidery & Maggam Work* designs catalog here:
   const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
   window.open(waUrl, '_blank');
 }
+
+// Real Finished Blouses Quality Showcase Modal
+function openPortfolioModal() {
+  const modal = document.getElementById('portfolioModal');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closePortfolioModal() {
+  const modal = document.getElementById('portfolioModal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+function openZoomImage(imgSrc, title, subtitle) {
+  const modal = document.getElementById('zoomModal');
+  const img = document.getElementById('zoomModalImg');
+  const titleEl = document.getElementById('zoomModalTitle');
+  const descEl = document.getElementById('zoomModalDesc');
+  const codeEl = document.getElementById('zoomModalCode');
+  const selectBtn = document.getElementById('zoomModalSelectBtn');
+
+  if (modal && img) {
+    img.src = imgSrc;
+    if (titleEl) titleEl.innerText = title || 'Finished Blouse Preview';
+    if (descEl) descEl.innerText = subtitle || 'Real Work Quality Reference';
+    if (codeEl) codeEl.innerText = 'REAL WORK';
+    if (selectBtn) selectBtn.style.display = 'none'; // hide select button for finished showcase
+    modal.classList.add('active');
+  }
+}
+
 

@@ -51,6 +51,7 @@ async def view_tailor_manager(request: Request):
     for o in orders:
         o["designs_detail"] = db.get_designs_by_ids(o.get("selected_design_ids", []))
     designs = db.get_all_designs(only_active=False)
+    finished_blouses = db.get_all_finished_blouses(only_active=False)
     gdrive_status = gdrive.check_gdrive_status()
     customer_url = get_customer_store_url(request)
     
@@ -58,6 +59,7 @@ async def view_tailor_manager(request: Request):
         "settings": settings,
         "orders": orders,
         "designs": designs,
+        "finished_blouses": finished_blouses,
         "gdrive_status": gdrive_status,
         "base_url": customer_url,
         "customer_store_url": customer_url
@@ -181,6 +183,38 @@ async def api_update_design(
 ):
     db.update_design(design_id, title=title, category=category, description=description or "", code=code, tags=tags)
     return {"success": True, "message": "Design updated successfully"}
+
+# --- FINISHED BLOUSES (QUALITY PROOF & REAL REFERENCES) API ---
+
+@app.get("/api/finished-blouses")
+async def api_get_finished_blouses():
+    items = db.get_all_finished_blouses(only_active=False)
+    return {"success": True, "count": len(items), "finished_blouses": items}
+
+@app.post("/api/finished-blouses/upload")
+async def api_upload_finished_blouse(
+    file: UploadFile = File(...),
+    title: str = Form(...),
+    fabric_type: Optional[str] = Form("Pure Silk"),
+    design_code_ref: Optional[str] = Form(""),
+    description: Optional[str] = Form("")
+):
+    content = await file.read()
+    img_path, thumb_path = processor.save_finished_blouse_image(content, file.filename or "finished.jpg")
+    new_id = db.add_finished_blouse(
+        title=title.strip(),
+        fabric_type=fabric_type.strip() if fabric_type else "Pure Silk",
+        design_code_ref=design_code_ref.strip() if design_code_ref else "",
+        description=description.strip() if description else "",
+        image_path=img_path,
+        thumb_path=thumb_path
+    )
+    return {"success": True, "id": new_id, "message": "Real finished blouse added to showcase!"}
+
+@app.delete("/api/finished-blouses/{blouse_id}")
+async def api_delete_finished_blouse(blouse_id: int):
+    db.delete_finished_blouse(blouse_id)
+    return {"success": True, "message": "Finished blouse removed from showcase"}
 
 # --- ORDERS API ---
 

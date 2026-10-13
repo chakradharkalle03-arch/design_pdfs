@@ -46,6 +46,21 @@ def init_db():
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
+
+    # Finished Blouses Table (Real finished work references for trust & quality proof)
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS finished_blouses (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        fabric_type TEXT,
+        design_code_ref TEXT,
+        description TEXT,
+        image_path TEXT NOT NULL,
+        thumb_path TEXT NOT NULL,
+        is_active INTEGER DEFAULT 1,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
     
     # Settings table
     cursor.execute("""
@@ -113,6 +128,40 @@ def init_db():
         INSERT INTO designs (code, title, category, description, image_path, thumb_path, pdf_source, pdf_page, tags)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, sample_designs)
+
+    # Check if sample finished blouses need to be seeded
+    cursor.execute("SELECT COUNT(*) as cnt FROM finished_blouses")
+    if cursor.fetchone()["cnt"] == 0:
+        sample_finished = [
+            (
+                "Royal Peacock Maggam Work on Crimson Silk Blouse",
+                "Pure Dharmavaram Silk",
+                "BL-101",
+                "Real finished customer blouse. Handcrafted gold zari peacock motif with antique metal beads, ruby stones, and grand bridal back neck finish.",
+                "uploads/designs/BL-101_peacock_maggam.jpg",
+                "uploads/designs/thumb_BL-101_peacock_maggam.jpg"
+            ),
+            (
+                "Sacred Lotus & Mango Paisley Zardosi Elbow Sleeve",
+                "Kanchipuram Pattu Saree Blouse",
+                "BL-102",
+                "Real finished sleeve embroidery. Elbow-length sleeve with dense gold zardosi embroidery, hanging pearls, and floral buttas.",
+                "uploads/designs/BL-102_lotus_sleeve.jpg",
+                "uploads/designs/thumb_BL-102_lotus_sleeve.jpg"
+            ),
+            (
+                "Emerald Cutwork & Antique Thread Work Blouse",
+                "Raw Silk Bridal Blouse",
+                "BL-103",
+                "Real finished contemporary cutwork neckline on bottle green silk with clean laser-neat edges and antique gold thread embroidery.",
+                "uploads/designs/BL-103_cutwork_backneck.jpg",
+                "uploads/designs/thumb_BL-103_cutwork_backneck.jpg"
+            )
+        ]
+        cursor.executemany("""
+        INSERT INTO finished_blouses (title, fabric_type, design_code_ref, description, image_path, thumb_path)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """, sample_finished)
         
     conn.commit()
     conn.close()
@@ -286,3 +335,36 @@ def update_settings(settings_dict):
         """, (key, str(val)))
     conn.commit()
     conn.close()
+
+# Finished Blouses CRUD (Quality Proof & Work References)
+def get_all_finished_blouses(only_active=True):
+    conn = get_db()
+    cursor = conn.cursor()
+    query = "SELECT * FROM finished_blouses WHERE 1=1"
+    if only_active:
+        query += " AND is_active = 1"
+    query += " ORDER BY id DESC"
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+def add_finished_blouse(title, fabric_type, design_code_ref, description, image_path, thumb_path):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+    INSERT INTO finished_blouses (title, fabric_type, design_code_ref, description, image_path, thumb_path)
+    VALUES (?, ?, ?, ?, ?, ?)
+    """, (title, fabric_type, design_code_ref, description, image_path, thumb_path))
+    new_id = cursor.lastrowid
+    conn.commit()
+    conn.close()
+    return new_id
+
+def delete_finished_blouse(blouse_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM finished_blouses WHERE id = ?", (blouse_id,))
+    conn.commit()
+    conn.close()
+
