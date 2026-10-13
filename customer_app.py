@@ -137,9 +137,9 @@ async def api_meta_catalog_xml(request: Request):
     return Response(content=xml_content, media_type="application/xml")
 
 @app.get("/api/meta/targeting")
-async def api_meta_targeting(radius_km: int = 10):
+async def api_meta_targeting(radius_km: int = 10, lat: Optional[float] = None, lng: Optional[float] = None, location_name: Optional[str] = None):
     import meta_ads_helper
-    return meta_ads_helper.get_radius_campaign_data(radius_km)
+    return meta_ads_helper.get_radius_campaign_data(radius_km=radius_km, lat=lat, lng=lng, location_name=location_name)
 
 if __name__ == "__main__":
     import uvicorn

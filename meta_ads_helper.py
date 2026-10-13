@@ -73,23 +73,28 @@ def generate_meta_catalog_xml(base_url: str) -> str:
     parsed = minidom.parseString(xml_str)
     return parsed.toprettyxml(indent="  ")
 
-def get_radius_campaign_data(radius_km: int = 10):
+def get_radius_campaign_data(radius_km: int = 10, lat: float = None, lng: float = None, location_name: str = None):
     """
-    Computes local targeting demographic estimates for Dharmavaram and surrounding areas.
+    Computes local targeting demographic estimates dynamically for live user location or Dharmavaram.
     """
-    # Density model around Dharmavaram (pop ~150k urban + rural mandals)
-    # Women aged 18-45 who are primary buyers of silk blouse embroidery
+    center_coords = {
+        "lat": lat if lat is not None else DHARMAVARAM_COORDS["lat"],
+        "lng": lng if lng is not None else DHARMAVARAM_COORDS["lng"],
+        "location_name": location_name or "Dharmavaram, Sri Sathya Sai District"
+    }
+
     factor = min(radius_km, 50)
     estimated_women = int(12000 + (factor ** 1.6) * 350)
     
     nearby_areas = []
-    if radius_km >= 5: nearby_areas.extend(["Dharmavaram Town", "Kothapeta", "Railway Colony", "Shantinagar"])
-    if radius_km >= 12: nearby_areas.extend(["Bathalapalli", "Tadimarri", "Chigicherla"])
-    if radius_km >= 20: nearby_areas.extend(["Chennekothapalli", "Mudigubba", "Kanaganapalli"])
-    if radius_km >= 35: nearby_areas.extend(["Puttaparthi (Prasanthi Nilayam)", "Anantapur City"])
+    base_label = location_name or "Dharmavaram"
+    if radius_km >= 2: nearby_areas.append(f"{base_label} Central")
+    if radius_km >= 6: nearby_areas.append(f"{base_label} Surrounding Mandals")
+    if radius_km >= 15: nearby_areas.append("Sub-district Towns & Villages")
+    if radius_km >= 30: nearby_areas.append("Adjacent District Hubs")
     
     return {
-        "center": DHARMAVARAM_COORDS,
+        "center": center_coords,
         "radius_km": radius_km,
         "estimated_target_women": estimated_women,
         "nearby_areas_covered": nearby_areas,
@@ -110,3 +115,4 @@ def get_radius_campaign_data(radius_km: int = 10):
             "estimated_daily_views": int(estimated_women * 0.08)
         }
     }
+

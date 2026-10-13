@@ -598,41 +598,83 @@
 
     <!-- TAB 6: INSTAGRAM & FACEBOOK DISTANCE RADIUS ADS -->
     <section id="metaAdsTab" class="admin-tab-content">
-      <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px;">
+      
+      <!-- Top Bar: Live Location Detection Banner -->
+      <div class="live-location-banner" style="background: linear-gradient(135deg, #133926 0%, #1E5638 100%); color: #FFF; padding: 16px 22px; border-radius: 14px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; box-shadow: 0 4px 16px rgba(19, 57, 38, 0.25); border: 1.5px solid #2ECC71;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="position: relative; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;">
+            <span style="position: absolute; width: 100%; height: 100%; border-radius: 50%; background: #2ECC71; opacity: 0.5; animation: locationPulse 2s infinite;"></span>
+            <span style="width: 12px; height: 12px; border-radius: 50%; background: #2ECC71; display: inline-block;"></span>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #A2E8B8; font-weight: 700;">
+              Live Online Location Recognition &bull; Active Ads Center
+            </div>
+            <div id="liveLocationTitle" style="font-size: 1.12rem; font-weight: 800; color: #FFF; margin-top: 2px;">
+              Dharmavaram, Sri Sathya Sai District, Andhra Pradesh
+            </div>
+            <div id="liveLocationCoords" style="font-size: 0.78rem; color: #D4EDDA;">
+              Coordinates: 14.4137&deg; N, 77.7281&deg; E &bull; Pincode: 515671 &bull; Auto-detecting online...
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button onclick="detectLiveLocation(true)" class="btn-select" style="background: rgba(255,255,255,0.18); color: #FFF; border: 1px solid rgba(255,255,255,0.35); font-size: 0.82rem; padding: 7px 14px; width: auto; font-weight: 700; cursor: pointer;">
+            <i class="fa-solid fa-location-crosshairs"></i> Detect My Live GPS
+          </button>
+          <button onclick="setBaseDharmavaram()" class="btn-select" style="background: rgba(255,255,255,0.18); color: #FFF; border: 1px solid rgba(255,255,255,0.35); font-size: 0.82rem; padding: 7px 14px; width: auto; font-weight: 700; cursor: pointer;">
+            <i class="fa-solid fa-store"></i> Reset to Dharmavaram
+          </button>
+        </div>
+      </div>
+
+      <!-- Main 2-Column Grid -->
+      <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px;">
         
         <!-- Column 1: Map & Radius Controls -->
         <div>
           <div style="background: #FFF; padding: 22px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); margin-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
               <div>
-                <h2 style="font-size: 1.3rem; color: var(--primary); font-weight: 700;">
-                  <i class="fa-solid fa-location-dot" style="color: #E74C3C;"></i> Local Distance Radius Studio
+                <h2 style="font-size: 1.25rem; color: var(--primary); font-weight: 700;">
+                  <i class="fa-solid fa-map-location-dot" style="color: #E74C3C;"></i> Local Radius Distance Control
                 </h2>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
-                  Target people scrolling Instagram & Facebook around <strong>Dharmavaram, Sri Sathya Sai District</strong>
+                <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">
+                  Set how many kilometers around your location people on Instagram &amp; Facebook will see your ads
                 </p>
               </div>
-              <span class="badge-code" style="background: #F4E7BD; color: #4A0E17; font-size: 0.85rem; padding: 6px 12px; position: static;">
-                <i class="fa-solid fa-map-pin"></i> Dharmavaram (515671)
+              <span id="badgeTargetPlace" class="badge-code" style="background: #F4E7BD; color: #4A0E17; font-size: 0.82rem; padding: 6px 12px; position: static;">
+                <i class="fa-solid fa-map-pin"></i> Dharmavaram Center
               </span>
+            </div>
+
+            <!-- City / Town Search Bar -->
+            <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+              <div style="position: relative; flex: 1;">
+                <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; top: 12px; color: #999; font-size: 0.9rem;"></i>
+                <input type="text" id="citySearchInput" class="form-input" style="padding-left: 36px;" placeholder="Search town or mandal (e.g., Dharmavaram, Bathalapalli, Puttaparthi, Anantapur)..." onkeydown="if(event.key==='Enter') searchLocationCustom()">
+              </div>
+              <button onclick="searchLocationCustom()" class="btn-select" style="width: auto; padding: 0 16px; white-space: nowrap; font-weight: 700;">
+                Target
+              </button>
             </div>
 
             <!-- Distance Slider Control -->
             <div style="background: #FAF8F5; border: 1.5px solid #EFE8DA; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <label style="font-weight: 700; font-size: 0.95rem; color: var(--primary);">
-                  Distance Radius from Dharmavaram:
+                <label style="font-weight: 700; font-size: 0.92rem; color: var(--primary);">
+                  Distance Radius:
                 </label>
-                <span id="radiusLabel" style="font-size: 1.15rem; font-weight: 800; color: #9A2433; background: #FFF; padding: 2px 12px; border-radius: 20px; border: 1px solid #D4AF37;">
+                <span id="radiusLabel" style="font-size: 1.15rem; font-weight: 800; color: #9A2433; background: #FFF; padding: 2px 14px; border-radius: 20px; border: 1.5px solid #D4AF37;">
                   10 KM
                 </span>
               </div>
-              <input type="range" id="radiusInput" min="2" max="45" value="10" step="1" style="width: 100%; accent-color: #6B1724; cursor: pointer;" oninput="onRadiusChange(this.value)">
-              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; margin-top: 4px;">
+              <input type="range" id="radiusInput" min="2" max="50" value="10" step="1" style="width: 100%; accent-color: #6B1724; cursor: pointer;" oninput="onRadiusChange(this.value)">
+              <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: #777; margin-top: 4px;">
                 <span>2 km (Local town)</span>
                 <span>10 km (Nearby mandals)</span>
                 <span>25 km (Rural district)</span>
-                <span>45 km (Includes Anantapur & Puttaparthi)</span>
+                <span>50 km (Broad region)</span>
               </div>
             </div>
 
@@ -642,14 +684,14 @@
             <!-- Audience Breakdown Cards -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
               <div style="background: #FFFDF9; border: 1px solid #EAE3D5; border-radius: 10px; padding: 12px;">
-                <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Estimated Target Women</div>
-                <div id="reachCount" style="font-size: 1.4rem; font-weight: 800; color: var(--primary); margin-top: 2px;">~45,000</div>
-                <div style="font-size: 0.75rem; color: #27AE60; font-weight: 600;">Ages 18-48 on Instagram & FB</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Estimated Reach</div>
+                <div id="reachCount" style="font-size: 1.35rem; font-weight: 800; color: var(--primary); margin-top: 2px;">~45,000</div>
+                <div style="font-size: 0.72rem; color: #27AE60; font-weight: 600;">Women 18-48 on Instagram &amp; FB</div>
               </div>
               <div style="background: #FFFDF9; border: 1px solid #EAE3D5; border-radius: 10px; padding: 12px;">
-                <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Covered Areas</div>
-                <div id="coveredTownsList" style="font-size: 0.8rem; color: #333; margin-top: 4px; font-weight: 600; line-height: 1.3;">
-                  Dharmavaram Town, Kothapeta, Bathalapalli, Tadimarri
+                <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Areas in Range</div>
+                <div id="coveredTownsList" style="font-size: 0.78rem; color: #333; margin-top: 4px; font-weight: 600; line-height: 1.3;">
+                  Dharmavaram Central, Surrounding Mandals
                 </div>
               </div>
             </div>
@@ -658,48 +700,91 @@
 
           <!-- Meta Product Feed Bridge Box -->
           <div style="background: #FFF; padding: 22px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm);">
-            <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 8px;">
-              <i class="fa-brands fa-meta" style="color: #0668E1;"></i> Meta Commerce Catalog Auto-Sync
-            </h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <h3 style="font-size: 1.1rem; color: var(--primary); font-weight: 700;">
+                <i class="fa-brands fa-meta" style="color: #0668E1;"></i> Meta Commerce Catalog Auto-Sync
+              </h3>
+              <span style="font-size: 0.75rem; background: #DEF7EC; color: #03543F; font-weight: 700; padding: 3px 8px; border-radius: 10px;">
+                <i class="fa-solid fa-check"></i> Live Synced
+              </span>
+            </div>
             <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px;">
-              Copy this live XML Product Feed URL and paste it into Facebook Commerce Manager / Instagram Shopping. Meta will automatically show your latest uploaded embroidery designs on people's feeds!
+              All <strong>{{ designs|length }} active catalog designs</strong> are automatically syndicated in real-time. Meta uses this XML feed to serve dynamic Instagram shopping ads directly to local customers!
             </p>
 
             <div style="display: flex; gap: 8px;">
               <input type="text" id="metaFeedUrlInput" class="form-input" value="{{ base_url }}/api/meta/catalog.xml" readonly>
-              <button onclick="copyMetaFeedUrl()" class="btn-select" style="width: auto; padding: 0 16px; white-space: nowrap;">
-                <i class="fa-solid fa-copy"></i> Copy Feed Link
+              <button onclick="copyMetaFeedUrl()" class="btn-select" style="width: auto; padding: 0 16px; white-space: nowrap; font-weight: 700;">
+                <i class="fa-solid fa-copy"></i> Copy Link
               </button>
             </div>
 
             <div style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap;">
-              <a href="https://adsmanager.facebook.com/adsmanager/create" target="_blank" class="btn-proceed" style="text-decoration: none; font-size: 0.85rem; padding: 10px 18px;">
+              <a href="https://adsmanager.facebook.com/adsmanager/create" target="_blank" class="btn-proceed" style="text-decoration: none; font-size: 0.82rem; padding: 9px 16px;">
                 <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Meta Ads Manager
               </a>
-              <a href="https://business.facebook.com/commerce" target="_blank" class="btn-select" style="text-decoration: none; width: auto; font-size: 0.85rem; padding: 10px 18px;">
+              <a href="https://business.facebook.com/commerce" target="_blank" class="btn-select" style="text-decoration: none; width: auto; font-size: 0.82rem; padding: 9px 16px;">
                 <i class="fa-solid fa-store"></i> Open Commerce Manager
               </a>
             </div>
           </div>
         </div>
 
-        <!-- Column 2: Live Instagram & Facebook Feed Simulator -->
+        <!-- Column 2: Automated Instagram & Facebook Ad Studio for All Available Designs -->
         <div>
-          <div style="background: #FFF; padding: 22px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); position: sticky; top: 70px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-              <h3 style="font-size: 1.1rem; color: var(--primary); font-weight: 700;">
-                <i class="fa-brands fa-instagram" style="color: #E1306C;"></i> Live Feed Ad Preview
-              </h3>
+          
+          <!-- Design Selector Carousel for All Available Designs -->
+          <div style="background: #FFF; padding: 20px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); margin-bottom: 18px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <div>
+                <h3 style="font-size: 1.1rem; color: var(--primary); font-weight: 700;">
+                  <i class="fa-solid fa-wand-magic-sparkles" style="color: #D4AF37;"></i> Catalog Designs (<span id="adDesignTotalCount">{{ designs|length }}</span>)
+                </h3>
+                <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">
+                  Click any design below to generate its ad automatically:
+                </p>
+              </div>
               <div style="display: flex; gap: 6px;">
-                <button class="cat-pill active" id="btnPreviewIg" onclick="setPreviewPlatform('instagram')" style="padding: 4px 10px; font-size: 0.75rem;">Instagram</button>
-                <button class="cat-pill" id="btnPreviewFb" onclick="setPreviewPlatform('facebook')" style="padding: 4px 10px; font-size: 0.75rem;">Facebook</button>
+                <button onclick="cyclePrevDesign()" class="btn-select" style="padding: 4px 8px; width: auto;" title="Previous Design">
+                  <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button onclick="cycleNextDesign()" class="btn-select" style="padding: 4px 8px; width: auto;" title="Next Design">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+                <button id="btnAutoCycle" onclick="toggleAutoCycle()" class="btn-select" style="padding: 4px 10px; width: auto; font-size: 0.75rem;" title="Auto-rotate designs every 4 seconds">
+                  <i class="fa-solid fa-play"></i> Auto-Play
+                </button>
               </div>
             </div>
 
-            <!-- Phone Frame Mockup -->
-            <div style="max-width: 380px; margin: 0 auto; border: 8px solid #1E1A1B; border-radius: 32px; overflow: hidden; background: #FFFFFF; box-shadow: 0 14px 34px rgba(0,0,0,0.18);">
-              
-              <!-- Instagram Post Header -->
+            <!-- Horizontal Scrollable Cards of All Available Designs -->
+            <div id="adDesignPicker" class="ad-design-picker-scroll">
+              <!-- Dynamically populated by JS -->
+            </div>
+          </div>
+
+          <!-- Format Switchers & Live Ad Mockup -->
+          <div style="background: #FFF; padding: 22px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); position: sticky; top: 70px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+              <h3 style="font-size: 1.05rem; color: var(--primary); font-weight: 700;">
+                <i class="fa-solid fa-bullhorn" style="color: #E1306C;"></i> Live Feed Ad Preview
+              </h3>
+              <div style="display: flex; gap: 6px;">
+                <button class="cat-pill active" id="btnPreviewIg" onclick="setAdPlatform('instagram')" style="padding: 4px 10px; font-size: 0.75rem;">
+                  <i class="fa-brands fa-instagram"></i> Instagram (1:1)
+                </button>
+                <button class="cat-pill" id="btnPreviewStory" onclick="setAdPlatform('story')" style="padding: 4px 10px; font-size: 0.75rem;">
+                  <i class="fa-solid fa-mobile-screen"></i> Story (9:16)
+                </button>
+                <button class="cat-pill" id="btnPreviewFb" onclick="setAdPlatform('facebook')" style="padding: 4px 10px; font-size: 0.75rem;">
+                  <i class="fa-brands fa-facebook"></i> Facebook
+                </button>
+              </div>
+            </div>
+
+            <!-- VIEW 1: Instagram Post Mockup (1:1 Square) -->
+            <div id="mockupIgSquare" class="phone-mockup-wrapper" style="max-width: 360px; margin: 0 auto; border: 8px solid #1E1A1B; border-radius: 32px; overflow: hidden; background: #FFFFFF; box-shadow: 0 14px 34px rgba(0,0,0,0.18);">
+              <!-- Post Header -->
               <div style="padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #F0ECE4;">
                 <div style="display: flex; align-items: center; gap: 10px;">
                   <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); padding: 2px;">
@@ -715,18 +800,15 @@
                 <i class="fa-solid fa-ellipsis" style="color: #666;"></i>
               </div>
 
-              <!-- Post Media (Latest Design Image) -->
+              <!-- Post Media (Selected Design Image) -->
               <div style="width: 100%; aspect-ratio: 1/1; background: #F8F5EE; overflow: hidden; position: relative;">
-                {% if designs and designs[0] %}
-                <img id="previewAdImage" src="/{{ designs[0].thumb_path }}" alt="Embroidery Design" style="width: 100%; height: 100%; object-fit: cover;">
-                {% else %}
-                <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #999;">No designs uploaded</div>
-                {% endif %}
+                <img id="previewAdImage" src="/static/images/hero-embroidery.jpg" alt="Embroidery Design" style="width: 100%; height: 100%; object-fit: cover;">
+                <span id="previewDesignBadge" class="badge-code" style="top: 10px; left: 10px; background: rgba(107, 23, 36, 0.9); color: #FFF; font-size: 0.75rem;">BL-101</span>
               </div>
 
               <!-- Sponsored Call To Action Bar -->
-              <a href="{{ base_url }}/" target="_blank" style="background: #2D68C4; color: #FFF; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; text-decoration: none; font-size: 0.84rem; font-weight: 700;">
-                <span>Shop Now &bull; View Designs &amp; Upload Blouse</span>
+              <a id="previewCtaLink" href="{{ base_url }}/" target="_blank" style="background: #2D68C4; color: #FFF; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; text-decoration: none; font-size: 0.84rem; font-weight: 700;">
+                <span id="previewCtaText">Shop Now &bull; View Design &amp; Upload Blouse</span>
                 <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem;"></i>
               </a>
 
@@ -746,15 +828,124 @@
                 <div>
                   <strong id="previewCaptionUser">akshaya_embroidery_dharmavaram</strong> 
                   <span id="previewCaptionText">
-                    ✨ Grand Bridal Maggam &amp; Silk Saree Blouse Embroidery in Dharmavaram! Tap above to view designs, upload your blouse cloth, or order directly on WhatsApp. WhatsApp: 7075101007.
+                    ✨ Exclusive Maggam &amp; Blouse Embroidery design in Dharmavaram! Handcrafted for bridal &amp; silk sarees. WhatsApp 7075101007.
                   </span>
                 </div>
-                <div style="color: #8E8E8E; font-size: 0.7rem; margin-top: 6px; text-transform: uppercase;">
-                  2 hours ago &bull; Dharmavaram, Sri Sathya Sai Dist
+                <div id="previewTimeLocation" style="color: #8E8E8E; font-size: 0.7rem; margin-top: 6px; text-transform: uppercase;">
+                  Just now &bull; Dharmavaram, Sri Sathya Sai Dist
+                </div>
+              </div>
+            </div>
+
+            <!-- VIEW 2: Instagram Story Mockup (9:16 Vertical) -->
+            <div id="mockupIgStory" class="mockup-story-container" style="display: none;">
+              <img id="previewStoryImage" src="/static/images/hero-embroidery.jpg" class="mockup-story-bg" alt="Story Ad">
+              <div class="mockup-story-overlay">
+                <!-- Top User Bar -->
+                <div>
+                  <div style="height: 3px; background: rgba(255,255,255,0.4); border-radius: 2px; margin-bottom: 8px;">
+                    <div style="height: 100%; width: 65%; background: #FFF; border-radius: 2px;"></div>
+                  </div>
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div style="width: 32px; height: 32px; border-radius: 50%; background: #FFF; color: #6B1724; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem;">AB</div>
+                      <div>
+                        <div style="font-size: 0.78rem; font-weight: 700;">akshaya_embroidery</div>
+                        <div id="previewStoryLocation" style="font-size: 0.68rem; color: #E0E0E0;">Sponsored &bull; Dharmavaram</div>
+                      </div>
+                    </div>
+                    <span style="font-size: 0.75rem; background: rgba(0,0,0,0.4); padding: 2px 8px; border-radius: 10px;">Ad</span>
+                  </div>
+                </div>
+
+                <!-- Center Floating Design Sticker -->
+                <div style="background: rgba(107, 23, 36, 0.88); backdrop-filter: blur(4px); border: 1.5px solid #D4AF37; border-radius: 14px; padding: 12px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.35);">
+                  <div id="storyDesignCodeBadge" style="font-size: 0.75rem; font-weight: 800; color: #F4E7BD; letter-spacing: 0.05em;">DESIGN: BL-101</div>
+                  <div id="storyDesignTitleText" style="font-size: 0.95rem; font-weight: 700; color: #FFF; margin: 3px 0;">Royal Peacock Maggam Work</div>
+                  <div style="font-size: 0.72rem; color: #F8F5EE;">Custom fitting with your own blouse material</div>
+                </div>
+
+                <!-- Bottom Swipe Up / WhatsApp Sticker -->
+                <div>
+                  <a id="storyCtaButton" href="#" target="_blank" style="background: #25D366; color: #FFF; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 30px; text-decoration: none; font-size: 0.88rem; font-weight: 700; box-shadow: 0 6px 18px rgba(37,211,102,0.45);">
+                    <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp (7075101007)
+                  </a>
+                  <div style="text-align: center; font-size: 0.68rem; margin-top: 6px; color: #EEE;">
+                    <i class="fa-solid fa-angles-up"></i> Tap above to view designs &amp; order
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- VIEW 3: Facebook Feed Post Mockup -->
+            <div id="mockupFb" class="phone-mockup-wrapper" style="max-width: 360px; margin: 0 auto; border: 8px solid #1E1A1B; border-radius: 32px; overflow: hidden; background: #FFFFFF; box-shadow: 0 14px 34px rgba(0,0,0,0.18); display: none;">
+              <!-- FB Header -->
+              <div style="padding: 12px 14px 8px 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 38px; height: 38px; border-radius: 50%; background: #6B1724; color: #F4E7BD; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem;">
+                      AB
+                    </div>
+                    <div>
+                      <div style="font-size: 0.85rem; font-weight: 700; color: #050505; display: flex; align-items: center; gap: 4px;">
+                        <span>Akshaya Blouse Embroidery Studio</span>
+                        <i class="fa-solid fa-circle-check" style="color: #1877F2; font-size: 0.75rem;"></i>
+                      </div>
+                      <div id="fbLocationSubtitle" style="font-size: 0.7rem; color: #65676B;">
+                        Sponsored &bull; Within 10 km of Dharmavaram &bull; <i class="fa-solid fa-earth-americas"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <i class="fa-solid fa-ellipsis" style="color: #65676B;"></i>
+                </div>
+                <!-- FB Caption -->
+                <div id="fbCaptionText" style="font-size: 0.8rem; color: #050505; margin-top: 10px; line-height: 1.4;">
+                  ✨ Handcrafted Blouse Maggam &amp; Embroidery in Dharmavaram! Bring your blouse fabric &amp; get royal custom embroidery. WhatsApp: 7075101007.
                 </div>
               </div>
 
+              <!-- FB Media -->
+              <div style="width: 100%; aspect-ratio: 1.1/1; background: #000; overflow: hidden;">
+                <img id="fbAdImage" src="/static/images/hero-embroidery.jpg" alt="Facebook Ad" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+
+              <!-- FB Link Preview Bar -->
+              <div style="background: #F0F2F5; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #E4E6EB;">
+                <div>
+                  <div style="font-size: 0.68rem; color: #65676B; text-transform: uppercase;">AKSHAYA-EMBROIDERY.LOCAL</div>
+                  <div id="fbLinkTitle" style="font-size: 0.82rem; font-weight: 700; color: #050505;">Browse Blouse Designs Online</div>
+                </div>
+                <a id="fbCtaBtn" href="https://wa.me/917075101007" target="_blank" style="background: #1877F2; color: #FFF; font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 6px; text-decoration: none; white-space: nowrap;">
+                  Send Message
+                </a>
+              </div>
             </div>
+
+            <!-- Instant Branded Ad Creative Generation & Download Tools -->
+            <div style="background: #FAF8F5; border: 1.5px solid #EFE8DA; border-radius: 14px; padding: 14px; margin-top: 18px;">
+              <div style="font-size: 0.82rem; font-weight: 700; color: var(--primary); margin-bottom: 8px;">
+                <i class="fa-solid fa-download"></i> 1-Click Branded Ad Creatives &amp; Sharing:
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                <button onclick="downloadBrandedAdImage('square')" class="btn-proceed" style="font-size: 0.78rem; padding: 9px 8px; width: 100%; justify-content: center; cursor: pointer;">
+                  <i class="fa-solid fa-image"></i> Download 1:1 Post
+                </button>
+                <button onclick="downloadBrandedAdImage('story')" class="btn-proceed" style="background: linear-gradient(135deg, #833AB4 0%, #FD1D1D 50%, #FCB045 100%); font-size: 0.78rem; padding: 9px 8px; width: 100%; justify-content: center; cursor: pointer;">
+                  <i class="fa-solid fa-mobile-screen"></i> Download 9:16 Story
+                </button>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <button onclick="copyAdCaption()" class="btn-select" style="font-size: 0.78rem; padding: 8px 8px; width: 100%; cursor: pointer;">
+                  <i class="fa-solid fa-copy"></i> Copy Ad Caption
+                </button>
+                <a id="btnTestWhatsAppAd" href="#" target="_blank" class="btn-whatsapp-send" style="font-size: 0.78rem; padding: 8px 8px; text-decoration: none; text-align: center; display: inline-flex; justify-content: center; align-items: center; width: 100%;">
+                  <i class="fa-brands fa-whatsapp"></i> Test WhatsApp Link
+                </a>
+              </div>
+            </div>
+
+            <!-- Hidden Canvas for Composite Ad Creative Generation -->
+            <canvas id="adCanvas" style="display: none;"></canvas>
 
           </div>
         </div>
@@ -764,12 +955,14 @@
 
   </main>
 
-  <!-- Pass Config to JS -->
+  <!-- Pass Config & All Catalog Designs to JS -->
   <script>
     window.ADMIN_CONFIG = {
       defaultPin: "{{ settings.admin_pin }}",
-      baseUrl: "{{ base_url }}"
+      baseUrl: "{{ base_url }}",
+      whatsapp: "{{ settings.whatsapp_number }}"
     };
+    window.CATALOG_DESIGNS = {{ designs|tojson }};
   </script>
   <script src="/static/js/admin.js"></script>
 </body>

@@ -8,7 +8,32 @@ document.addEventListener('DOMContentLoaded', () => {
   initCategories();
   loadSavedSelection();
   updateUI();
+  handleUrlDeepLink();
 });
+
+function handleUrlDeepLink() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetCode = urlParams.get('select') || urlParams.get('code');
+  if (targetCode) {
+    setTimeout(() => {
+      const card = document.querySelector(`.design-card[data-code="${targetCode}"]`);
+      if (card) {
+        const id = card.getAttribute('data-id');
+        if (!selectedDesigns.has(id)) {
+          toggleSelectDesign(id);
+        }
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.style.transition = 'all 0.5s ease';
+        card.style.outline = '3px solid #D4AF37';
+        card.style.boxShadow = '0 0 25px rgba(212, 175, 55, 0.7)';
+        setTimeout(() => {
+          card.style.outline = '';
+          card.style.boxShadow = '';
+        }, 4000);
+      }
+    }, 250);
+  }
+}
 
 // Category Filter Handling
 function initCategories() {
