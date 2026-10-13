@@ -18,37 +18,6 @@
 </head>
 <body>
 
-  <!-- Tailor Quick Action Bar -->
-  <div style="background: #3B0810; color: #F4E7BD; padding: 10px 0; border-bottom: 2px solid var(--gold); font-size: 0.88rem; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
-    <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <span style="background: var(--gold-gradient); color: #3B0810; font-weight: 800; font-size: 0.75rem; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.5px;">TAILOR TOOLBAR</span>
-        <span style="color: #FFF; font-weight: 500;">Quick Owner Actions:</span>
-      </div>
-      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-        <!-- 1. COPY LINK FOR CUSTOMER -->
-        <button onclick="copyCustomerCatalogUrl()" style="background: var(--gold-gradient); color: #381A05; border: none; padding: 7px 14px; border-radius: 20px; font-weight: 700; font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
-          <i class="fa-solid fa-copy"></i> Copy Link for Customer
-        </button>
-
-        <!-- 2. SHARE DIRECT TO WHATSAPP -->
-        <button onclick="shareDirectWhatsApp()" style="background: #25D366; color: #FFF; border: none; padding: 7px 14px; border-radius: 20px; font-weight: 700; font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-brands fa-whatsapp"></i> Share on WhatsApp
-        </button>
-
-        <!-- 3. UPLOAD NEW DESIGNS -->
-        <a href="/admin#uploadTab" style="background: rgba(255,255,255,0.15); color: #FFF; border: 1px solid rgba(212,175,55,0.5); text-decoration: none; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.82rem; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-cloud-arrow-up"></i> Upload New Designs (PDF)
-        </a>
-
-        <!-- 4. VIEW ORDERS -->
-        <a href="/admin#ordersTab" style="background: rgba(255,255,255,0.15); color: #FFF; border: 1px solid rgba(212,175,55,0.5); text-decoration: none; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.82rem; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-inbox"></i> Customer Orders
-        </a>
-      </div>
-    </div>
-  </div>
-
   <!-- Boutique Top Header -->
   <header class="boutique-header">
     <div class="container">
@@ -70,9 +39,6 @@
             <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
           </a>
           {% endif %}
-          <a href="/admin" class="btn-header btn-admin-header">
-            <i class="fa-solid fa-lock"></i> Tailor Dashboard
-          </a>
         </div>
       </div>
     </div>

@@ -36,29 +36,35 @@ Solve your phone storage problem: instead of sending huge PDF files and photos o
 
 ---
 
-## 🚀 How to Run the Application
+## 🚀 Two Dedicated Webs (Easy to Handle)
 
-### Option 1: One-Click (Easiest)
-Simply double-click:
-```
-start_server.bat
-```
-The server will start on port `8000`.
+The system is separated into **two dedicated web applications**:
 
-### Option 2: Command Line
-Open PowerShell or Terminal in this folder and run:
-```powershell
-python -m uvicorn app:app --host 0.0.0.0 --port 8000 --reload
-```
+1. **📱 Customer Store Web (Port 8000):**
+   - URL: [http://localhost:8000/](http://localhost:8000/) (or `http://192.168.1.105:8000`)
+   - Pure customer shopping experience with zero admin toolbars or upload buttons.
+   - Customers can browse embroidery designs, zoom into details, select designs, upload their unstitched blouse photo, and submit orders directly via WhatsApp.
+
+2. **🪡 Tailor Manager Web (Port 8001 - You Maintain):**
+   - URL: [http://localhost:8001/](http://localhost:8001/)
+   - Your dedicated owner control center.
+   - View customer orders with their blouse photos, upload PDF catalogs & images, 1-click WhatsApp customer reply, and copy customer store link.
+
+---
+
+### 💻 1-Click Launchers
+
+- **Double-click `start_both_webs.bat`:** Launches BOTH the Customer Web (port 8000) and your Manager Web (port 8001) simultaneously!
+- **Or double-click `start_customer_store.bat`:** Runs only the customer store on port 8000.
+- **Or double-click `start_tailor_manager.bat`:** Runs only your manager portal on port 8001.
 
 ---
 
 ## 🌐 URLs & Access
 
-- **Customer Store / Catalog:** [http://localhost:8000/](http://localhost:8000/)
-- **Local Wi-Fi Access (from mobile phone):** `http://192.168.1.105:8000/` *(Your computer and phone must be on the same Wi-Fi)*
-- **WhatsApp Number:** `+91 7075101007`
-- **Tailor Admin Portal:** [http://localhost:8000/admin](http://localhost:8000/admin) (Instant access - No PIN required)
+- **Customer Store:** [http://localhost:8000/](http://localhost:8000/)
+- **Tailor Manager Web:** [http://localhost:8001/](http://localhost:8001/)
+- **WhatsApp Contact Number:** `+91 7075101007`
 
 ---
 
