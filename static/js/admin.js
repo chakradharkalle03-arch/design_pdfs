@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initDragAndDrop();
   checkUrlHash();
   initAdStudio();
-  detectLiveLocation(false);
+  setBaseDharmavaram(); // Default to Dharmavaram base on load
 });
 
 function checkUrlHash() {
@@ -709,10 +709,18 @@ async function resolveCoordinatesAndCenter(lat, lng, sourceLabel) {
     const geo = await res.json();
     if (geo && geo.address) {
       const a = geo.address;
-      placeName = a.city || a.town || a.village || a.suburb || a.county || 'Dharmavaram';
-      districtName = a.state_district || a.county || 'Sri Sathya Sai';
-      stateName = a.state || 'Andhra Pradesh';
-      fullLabel = `${placeName}, ${districtName} Dist, ${stateName}`;
+      const isIndia = (a.country_code === 'in') || (a.country && a.country.toLowerCase() === 'india');
+      if (isIndia) {
+        placeName = a.city || a.town || a.village || a.suburb || a.county || 'Dharmavaram';
+        districtName = a.state_district || a.county || 'Sri Sathya Sai';
+        stateName = a.state || 'Andhra Pradesh';
+        fullLabel = `${placeName}, ${districtName} Dist, ${stateName}`;
+      } else {
+        placeName = a.city || a.town || a.village || a.county || 'Local Area';
+        districtName = a.county || a.state || '';
+        stateName = a.country || '';
+        fullLabel = [placeName, districtName, stateName].filter(Boolean).join(', ');
+      }
     }
   } catch (e) {
     console.warn('Reverse geocoding error:', e);
