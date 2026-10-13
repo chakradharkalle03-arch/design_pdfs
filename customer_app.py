@@ -128,6 +128,19 @@ async def api_get_qr_code(request: Request, url: Optional[str] = None):
     buf.seek(0)
     return StreamingResponse(buf, media_type="image/png")
 
+# --- META (INSTAGRAM & FACEBOOK) COMMERCE FEED ---
+@app.get("/api/meta/catalog.xml")
+async def api_meta_catalog_xml(request: Request):
+    import meta_ads_helper
+    xml_content = meta_ads_helper.generate_meta_catalog_xml(get_base_url(request))
+    from fastapi.responses import Response
+    return Response(content=xml_content, media_type="application/xml")
+
+@app.get("/api/meta/targeting")
+async def api_meta_targeting(radius_km: int = 10):
+    import meta_ads_helper
+    return meta_ads_helper.get_radius_campaign_data(radius_km)
+
 if __name__ == "__main__":
     import uvicorn
     print("Starting Customer Store Web on http://localhost:8000 ...")

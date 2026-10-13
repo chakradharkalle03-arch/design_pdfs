@@ -11,6 +11,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="/static/css/style.css">
 
+  <!-- Leaflet Map Library for Distance & Radius Targeting -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
   <style>
     body { padding-bottom: 40px; }
     .badge-pill {
@@ -202,6 +206,9 @@
       </button>
       <button class="admin-tab-btn" onclick="switchTab('shareTab')">
         <i class="fa-solid fa-share-nodes"></i> WhatsApp Share & QR Code
+      </button>
+      <button class="admin-tab-btn" onclick="switchTab('metaAdsTab')">
+        <i class="fa-brands fa-instagram" style="color: #E1306C;"></i> Instagram & FB Radius Ads
       </button>
       <button class="admin-tab-btn" onclick="switchTab('settingsTab')">
         <i class="fa-solid fa-gear"></i> Settings & Google Drive
@@ -584,6 +591,172 @@
             </div>
           </div>
 
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 6: INSTAGRAM & FACEBOOK DISTANCE RADIUS ADS -->
+    <section id="metaAdsTab" class="admin-tab-content">
+      <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px;">
+        
+        <!-- Column 1: Map & Radius Controls -->
+        <div>
+          <div style="background: #FFF; padding: 22px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <h2 style="font-size: 1.3rem; color: var(--primary); font-weight: 700;">
+                  <i class="fa-solid fa-location-dot" style="color: #E74C3C;"></i> Local Distance Radius Studio
+                </h2>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+                  Target people scrolling Instagram & Facebook around <strong>Dharmavaram, Sri Sathya Sai District</strong>
+                </p>
+              </div>
+              <span class="badge-code" style="background: #F4E7BD; color: #4A0E17; font-size: 0.85rem; padding: 6px 12px; position: static;">
+                <i class="fa-solid fa-map-pin"></i> Dharmavaram (515671)
+              </span>
+            </div>
+
+            <!-- Distance Slider Control -->
+            <div style="background: #FAF8F5; border: 1.5px solid #EFE8DA; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <label style="font-weight: 700; font-size: 0.95rem; color: var(--primary);">
+                  Distance Radius from Dharmavaram:
+                </label>
+                <span id="radiusLabel" style="font-size: 1.15rem; font-weight: 800; color: #9A2433; background: #FFF; padding: 2px 12px; border-radius: 20px; border: 1px solid #D4AF37;">
+                  10 KM
+                </span>
+              </div>
+              <input type="range" id="radiusInput" min="2" max="45" value="10" step="1" style="width: 100%; accent-color: #6B1724; cursor: pointer;" oninput="onRadiusChange(this.value)">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; margin-top: 4px;">
+                <span>2 km (Local town)</span>
+                <span>10 km (Nearby mandals)</span>
+                <span>25 km (Rural district)</span>
+                <span>45 km (Includes Anantapur & Puttaparthi)</span>
+              </div>
+            </div>
+
+            <!-- Leaflet Interactive Map -->
+            <div id="radiusMap" style="height: 320px; width: 100%; border-radius: 12px; border: 1.5px solid #D4AF37; z-index: 10; position: relative;"></div>
+
+            <!-- Audience Breakdown Cards -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
+              <div style="background: #FFFDF9; border: 1px solid #EAE3D5; border-radius: 10px; padding: 12px;">
+                <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Estimated Target Women</div>
+                <div id="reachCount" style="font-size: 1.4rem; font-weight: 800; color: var(--primary); margin-top: 2px;">~45,000</div>
+                <div style="font-size: 0.75rem; color: #27AE60; font-weight: 600;">Ages 18-48 on Instagram & FB</div>
+              </div>
+              <div style="background: #FFFDF9; border: 1px solid #EAE3D5; border-radius: 10px; padding: 12px;">
+                <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Covered Areas</div>
+                <div id="coveredTownsList" style="font-size: 0.8rem; color: #333; margin-top: 4px; font-weight: 600; line-height: 1.3;">
+                  Dharmavaram Town, Kothapeta, Bathalapalli, Tadimarri
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Meta Product Feed Bridge Box -->
+          <div style="background: #FFF; padding: 22px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm);">
+            <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 8px;">
+              <i class="fa-brands fa-meta" style="color: #0668E1;"></i> Meta Commerce Catalog Auto-Sync
+            </h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px;">
+              Copy this live XML Product Feed URL and paste it into Facebook Commerce Manager / Instagram Shopping. Meta will automatically show your latest uploaded embroidery designs on people's feeds!
+            </p>
+
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="metaFeedUrlInput" class="form-input" value="{{ base_url }}/api/meta/catalog.xml" readonly>
+              <button onclick="copyMetaFeedUrl()" class="btn-select" style="width: auto; padding: 0 16px; white-space: nowrap;">
+                <i class="fa-solid fa-copy"></i> Copy Feed Link
+              </button>
+            </div>
+
+            <div style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap;">
+              <a href="https://adsmanager.facebook.com/adsmanager/create" target="_blank" class="btn-proceed" style="text-decoration: none; font-size: 0.85rem; padding: 10px 18px;">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Meta Ads Manager
+              </a>
+              <a href="https://business.facebook.com/commerce" target="_blank" class="btn-select" style="text-decoration: none; width: auto; font-size: 0.85rem; padding: 10px 18px;">
+                <i class="fa-solid fa-store"></i> Open Commerce Manager
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 2: Live Instagram & Facebook Feed Simulator -->
+        <div>
+          <div style="background: #FFF; padding: 22px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); position: sticky; top: 70px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <h3 style="font-size: 1.1rem; color: var(--primary); font-weight: 700;">
+                <i class="fa-brands fa-instagram" style="color: #E1306C;"></i> Live Feed Ad Preview
+              </h3>
+              <div style="display: flex; gap: 6px;">
+                <button class="cat-pill active" id="btnPreviewIg" onclick="setPreviewPlatform('instagram')" style="padding: 4px 10px; font-size: 0.75rem;">Instagram</button>
+                <button class="cat-pill" id="btnPreviewFb" onclick="setPreviewPlatform('facebook')" style="padding: 4px 10px; font-size: 0.75rem;">Facebook</button>
+              </div>
+            </div>
+
+            <!-- Phone Frame Mockup -->
+            <div style="max-width: 380px; margin: 0 auto; border: 8px solid #1E1A1B; border-radius: 32px; overflow: hidden; background: #FFFFFF; box-shadow: 0 14px 34px rgba(0,0,0,0.18);">
+              
+              <!-- Instagram Post Header -->
+              <div style="padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #F0ECE4;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); padding: 2px;">
+                    <div style="width: 100%; height: 100%; border-radius: 50%; background: #FFF; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: #6B1724; font-weight: 800;">
+                      AB
+                    </div>
+                  </div>
+                  <div>
+                    <div id="previewAccountName" style="font-size: 0.82rem; font-weight: 700; color: #262626;">akshaya_embroidery_dharmavaram</div>
+                    <div id="previewLocationSubtitle" style="font-size: 0.7rem; color: #8E8E8E;">Sponsored &bull; Within 10 km of Dharmavaram</div>
+                  </div>
+                </div>
+                <i class="fa-solid fa-ellipsis" style="color: #666;"></i>
+              </div>
+
+              <!-- Post Media (Latest Design Image) -->
+              <div style="width: 100%; aspect-ratio: 1/1; background: #F8F5EE; overflow: hidden; position: relative;">
+                {% if designs and designs[0] %}
+                <img id="previewAdImage" src="/{{ designs[0].thumb_path }}" alt="Embroidery Design" style="width: 100%; height: 100%; object-fit: cover;">
+                {% else %}
+                <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #999;">No designs uploaded</div>
+                {% endif %}
+              </div>
+
+              <!-- Sponsored Call To Action Bar -->
+              <a href="{{ base_url }}/" target="_blank" style="background: #2D68C4; color: #FFF; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; text-decoration: none; font-size: 0.84rem; font-weight: 700;">
+                <span>Shop Now &bull; View Designs &amp; Upload Blouse</span>
+                <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem;"></i>
+              </a>
+
+              <!-- Engagement Icons -->
+              <div style="padding: 10px 14px 6px 14px; display: flex; justify-content: space-between; font-size: 1.15rem; color: #262626;">
+                <div style="display: flex; gap: 14px;">
+                  <i class="fa-regular fa-heart" style="color: #E74C3C;"></i>
+                  <i class="fa-regular fa-comment"></i>
+                  <i class="fa-regular fa-paper-plane"></i>
+                </div>
+                <i class="fa-regular fa-bookmark"></i>
+              </div>
+
+              <!-- Likes & Caption -->
+              <div style="padding: 0 14px 14px 14px; font-size: 0.78rem; line-height: 1.4;">
+                <div style="font-weight: 700; margin-bottom: 4px;">1,428 likes</div>
+                <div>
+                  <strong id="previewCaptionUser">akshaya_embroidery_dharmavaram</strong> 
+                  <span id="previewCaptionText">
+                    ✨ Grand Bridal Maggam &amp; Silk Saree Blouse Embroidery in Dharmavaram! Tap above to view designs, upload your blouse cloth, or order directly on WhatsApp. WhatsApp: 7075101007.
+                  </span>
+                </div>
+                <div style="color: #8E8E8E; font-size: 0.7rem; margin-top: 6px; text-transform: uppercase;">
+                  2 hours ago &bull; Dharmavaram, Sri Sathya Sai Dist
+                </div>
+              </div>
+
+            </div>
+
+          </div>
         </div>
 
       </div>

@@ -336,6 +336,19 @@ async def api_sync_gdrive():
     res = gdrive.sync_to_google_drive()
     return res
 
+# --- META (INSTAGRAM & FACEBOOK) COMMERCE FEED & TARGETING ---
+@app.get("/api/meta/catalog.xml")
+async def api_meta_catalog_xml(request: Request):
+    import meta_ads_helper
+    xml_content = meta_ads_helper.generate_meta_catalog_xml(get_base_url(request))
+    from fastapi.responses import Response
+    return Response(content=xml_content, media_type="application/xml")
+
+@app.get("/api/meta/targeting")
+async def api_meta_targeting(radius_km: int = 10):
+    import meta_ads_helper
+    return meta_ads_helper.get_radius_campaign_data(radius_km)
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)

@@ -31,6 +31,10 @@ function switchTab(tabId) {
       btn.classList.add('active');
     }
   });
+
+  if (tabId === 'metaAdsTab') {
+    setTimeout(initRadiusMap, 150);
+  }
 }
 
 // Order Status & Management
@@ -299,3 +303,115 @@ async function saveBoutiqueSettings(event) {
     btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Settings';
   }
 }
+
+// --- Local Radius & Meta Ads Studio Logic (Dharmavaram) ---
+let radiusMap = null;
+let radiusMarker = null;
+let radiusCircle = null;
+const DHARMAVARAM_LAT = 14.4137;
+const DHARMAVARAM_LNG = 77.7281;
+
+function initRadiusMap() {
+  const mapEl = document.getElementById('radiusMap');
+  if (!mapEl) return;
+  if (typeof L === 'undefined') {
+    console.warn('Leaflet library loading...');
+    setTimeout(initRadiusMap, 300);
+    return;
+  }
+
+  if (!radiusMap) {
+    radiusMap = L.map('radiusMap').setView([DHARMAVARAM_LAT, DHARMAVARAM_LNG], 11);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(radiusMap);
+
+    // Boutique Marker in Dharmavaram
+    radiusMarker = L.marker([DHARMAVARAM_LAT, DHARMAVARAM_LNG]).addTo(radiusMap);
+    radiusMarker.bindPopup("<b>Akshaya Blouse Embroidery Studio</b><br>Dharmavaram, Sri Sathya Sai District").openPopup();
+
+    // Coverage Radius Circle (10km default)
+    radiusCircle = L.circle([DHARMAVARAM_LAT, DHARMAVARAM_LNG], {
+      color: '#6B1724',
+      fillColor: '#D4AF37',
+      fillOpacity: 0.28,
+      weight: 2.5,
+      radius: 10000 // 10 km
+    }).addTo(radiusMap);
+  } else {
+    radiusMap.invalidateSize();
+  }
+}
+
+async function onRadiusChange(km) {
+  const radiusKm = parseInt(km);
+  const label = document.getElementById('radiusLabel');
+  if (label) label.innerText = `${radiusKm} KM`;
+
+  if (radiusCircle) {
+    radiusCircle.setRadius(radiusKm * 1000);
+  }
+
+  if (radiusMap) {
+    if (radiusKm <= 5) radiusMap.setZoom(13);
+    else if (radiusKm <= 15) radiusMap.setZoom(11);
+    else if (radiusKm <= 30) radiusMap.setZoom(10);
+    else radiusMap.setZoom(9);
+  }
+
+  // Update simulator subtitle
+  const locSubtitle = document.getElementById('previewLocationSubtitle');
+  if (locSubtitle) {
+    locSubtitle.innerText = `Sponsored • Within ${radiusKm} km of Dharmavaram`;
+  }
+
+  // Fetch updated reach calculation
+  try {
+    const res = await fetch(`/api/meta/targeting?radius_km=${radiusKm}`);
+    const data = await res.json();
+    if (data) {
+      const reachEl = document.getElementById('reachCount');
+      if (reachEl) reachEl.innerText = `~${data.estimated_target_women.toLocaleString()}`;
+
+      const townsEl = document.getElementById('coveredTownsList');
+      if (townsEl && data.nearby_areas_covered) {
+        townsEl.innerText = data.nearby_areas_covered.join(', ');
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function setPreviewPlatform(platform) {
+  const btnIg = document.getElementById('btnPreviewIg');
+  const btnFb = document.getElementById('btnPreviewFb');
+  const accName = document.getElementById('previewAccountName');
+  const capUser = document.getElementById('previewCaptionUser');
+
+  if (platform === 'instagram') {
+    if (btnIg) btnIg.classList.add('active');
+    if (btnFb) btnFb.classList.remove('active');
+    if (accName) accName.innerText = 'akshaya_embroidery_dharmavaram';
+    if (capUser) capUser.innerText = 'akshaya_embroidery_dharmavaram';
+  } else {
+    if (btnFb) btnFb.classList.add('active');
+    if (btnIg) btnIg.classList.remove('active');
+    if (accName) accName.innerText = 'Akshaya Blouse Embroidery Studio';
+    if (capUser) capUser.innerText = 'Akshaya Blouse Embroidery Studio';
+  }
+}
+
+function copyMetaFeedUrl() {
+  const input = document.getElementById('metaFeedUrlInput');
+  if (!input) return;
+  input.select();
+  navigator.clipboard.writeText(input.value).then(() => {
+    alert('✅ Meta Commerce Product Feed link copied!\n\nPaste this URL in your Facebook Commerce Manager / Instagram Shopping data feed settings.');
+  }).catch(() => {
+    prompt('Copy Meta Feed Link:', input.value);
+  });
+}
+
