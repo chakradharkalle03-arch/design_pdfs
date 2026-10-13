@@ -1,5 +1,5 @@
 @echo off
-title Get Public WhatsApp Link - Chakri Boutique
+title Get Public WhatsApp Link - Akshaya Boutique
 color 0B
 echo ========================================================
 echo    Generate Public Internet Link for Customers

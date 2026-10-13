@@ -27,7 +27,7 @@ for folder in ["uploads/designs", "uploads/blouses", "uploads/pdfs", "backups"]:
 # Initialize database & seed sample data
 db.init_db()
 
-app = FastAPI(title="Chakri Blouse Embroidery Studio", version="1.0.0")
+app = FastAPI(title="Akshaya Blouse Embroidery Studio", version="1.0.0")
 
 # Mount static and upload directories
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")

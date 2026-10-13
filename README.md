@@ -1,4 +1,4 @@
-# 🌸 Chakri Blouse Embroidery Studio & Online Customer Catalog
+# 🌸 Akshaya Blouse Embroidery Studio & Online Customer Catalog
 
 A complete, mobile-first web application designed specifically for **blouse embroidery boutiques & tailors**. 
 

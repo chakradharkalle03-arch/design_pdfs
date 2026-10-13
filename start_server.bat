@@ -1,8 +1,8 @@
 @echo off
-title Chakri Blouse Embroidery Studio
+title Akshaya Blouse Embroidery Studio
 color 0A
 echo ========================================================
-echo    Chakri Blouse Embroidery Studio - Web Server
+echo    Akshaya Blouse Embroidery Studio - Web Server
 echo ========================================================
 echo.
 echo Starting web server on http://localhost:8000 ...

@@ -1,5 +1,5 @@
 @echo off
-title Push to GitHub - Chakri Boutique
+title Push to GitHub - Akshaya Boutique
 color 0A
 echo ========================================================
 echo    Push to https://github.com/chakradharkalle03-arch/design_pdfs

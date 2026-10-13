@@ -12,7 +12,7 @@ def test_endpoints():
     print("Testing GET / ...")
     r = client.get("/")
     assert r.status_code == 200, f"Expected 200, got {r.status_code}"
-    assert "Chakri Blouse Embroidery Studio" in r.text
+    assert "Akshaya Blouse Embroidery Studio" in r.text
     print("Catalog HTML OK!")
 
     # 2. Test Admin HTML

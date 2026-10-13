@@ -57,7 +57,7 @@ def init_db():
     
     # Default settings
     default_settings = {
-        "business_name": "Chakri Blouse Embroidery Studio",
+        "business_name": "Akshaya Blouse Embroidery Studio",
         "tagline": "Exclusive Handcrafted & Maggam Embroidery Designs for Designer Blouses",
         "whatsapp_number": "917075101007",
         "owner_email": "kallechakri022@gmail.com",

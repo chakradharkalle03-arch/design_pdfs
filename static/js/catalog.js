@@ -346,7 +346,7 @@ function copyCustomerCatalogUrl() {
 
 function shareDirectWhatsApp() {
   const url = (window.BOUTIQUE_CONFIG && window.BOUTIQUE_CONFIG.baseUrl) ? window.BOUTIQUE_CONFIG.baseUrl : window.location.origin;
-  const bizName = (window.BOUTIQUE_CONFIG && window.BOUTIQUE_CONFIG.businessName) ? window.BOUTIQUE_CONFIG.businessName : 'Chakri Blouse Embroidery Studio';
+  const bizName = (window.BOUTIQUE_CONFIG && window.BOUTIQUE_CONFIG.businessName) ? window.BOUTIQUE_CONFIG.businessName : 'Akshaya Blouse Embroidery Studio';
   const msg = 
 `🌸 *${bizName}* 🌸
 Namaste! 🙏
