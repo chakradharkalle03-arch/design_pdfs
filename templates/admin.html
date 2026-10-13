@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - {{ settings.business_name }}</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+
+  <style>
+    body { padding-bottom: 40px; }
+    .badge-pill {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .stat-card {
+      background: #FFFFFF;
+      padding: 16px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #FAF5EB;
+      color: #B8860B;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+    .stat-number {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.1;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .admin-grid-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .order-item-wrap {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-sm);
+    }
+    .order-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #F0ECE4;
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .order-grid-visual {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 768px) {
+      .order-grid-visual {
+        grid-template-columns: 1fr;
+      }
+    }
+    .admin-blouse-box {
+      border: 1px solid #E5DFD3;
+      border-radius: 10px;
+      padding: 10px;
+      background: #FAF8F5;
+      text-align: center;
+    }
+    .admin-blouse-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #FFF;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .admin-table th, .admin-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #EFE8DA;
+    }
+    .admin-table th {
+      background: #FAF8F5;
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+    .admin-table tr:hover {
+      background-color: #FDFAF5;
+    }
+    .pin-modal-card {
+      max-width: 380px;
+      padding: 30px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Admin Navbar -->
+  <nav class="admin-navbar">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 1.5rem; color: #D4AF37;"><i class="fa-solid fa-gem"></i></span>
+        <div>
+          <span style="font-weight: 700; font-size: 1.15rem; color: #FFF;">{{ settings.business_name }}</span>
+          <span style="font-size: 0.78rem; color: #F4E7BD; margin-left: 8px;">Tailor Admin Portal</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <a href="/" class="btn-header" style="background: rgba(255,255,255,0.15); color: #FFF;">
+          <i class="fa-solid fa-store"></i> View Customer Store
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Dashboard (Unlocked for Everyone) -->
+  <main class="container" id="adminMainContent" style="display: block; margin-top: 24px;">
+
+    <!-- Top Stats -->
+    <div class="admin-grid-stats">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fa-solid fa-inbox"></i></div>
+        <div>
+          <div class="stat-number" id="statOrdersCount">{{ orders|length }}</div>
+          <div class="stat-label">Customer Orders</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fa-solid fa-scissors"></i></div>
+        <div>
+          <div class="stat-number" id="statDesignsCount">{{ designs|length }}</div>
+          <div class="stat-label">Active Designs</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="color: #25D366;"><i class="fa-brands fa-whatsapp"></i></div>
+        <div>
+          <div class="stat-number" style="font-size: 1.2rem; color: #2D2324;">+{{ settings.whatsapp_number }}</div>
+          <div class="stat-label">WhatsApp Contact</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="color: #1A73E8;"><i class="fa-brands fa-google-drive"></i></div>
+        <div>
+          <div class="stat-number" style="font-size: 1.1rem; color: #2D2324;">Storage Ready</div>
+          <div class="stat-label">Cloud Backup</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Navigation Tabs -->
+    <div class="admin-tabs">
+      <button class="admin-tab-btn active" onclick="switchTab('ordersTab')">
+        <i class="fa-solid fa-bell"></i> Customer Orders (<span id="tabOrderBadge">{{ orders|length }}</span>)
+      </button>
+      <button class="admin-tab-btn" onclick="switchTab('uploadTab')">
+        <i class="fa-solid fa-file-pdf"></i> Upload New Designs (PDF/Image)
+      </button>
+      <button class="admin-tab-btn" onclick="switchTab('designsTab')">
+        <i class="fa-solid fa-images"></i> Manage Catalog (<span id="tabDesignBadge">{{ designs|length }}</span>)
+      </button>
+      <button class="admin-tab-btn" onclick="switchTab('shareTab')">
+        <i class="fa-solid fa-share-nodes"></i> WhatsApp Share & QR Code
+      </button>
+      <button class="admin-tab-btn" onclick="switchTab('settingsTab')">
+        <i class="fa-solid fa-gear"></i> Settings & Google Drive
+      </button>
+    </div>
+
+    <!-- TAB 1: CUSTOMER ORDERS -->
+    <section id="ordersTab" class="admin-tab-content active">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+        <h2 style="font-size: 1.3rem; color: var(--primary);">Customer Inquiries & Blouse Photos</h2>
+        <div style="display: flex; gap: 8px;">
+          <select id="orderStatusFilter" class="form-input" style="padding: 6px 12px; width: auto;" onchange="filterOrdersByStatus()">
+            <option value="ALL">All Statuses</option>
+            <option value="NEW">New Requests</option>
+            <option value="CONTACTED">Contacted</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="COMPLETED">Completed</option>
+          </select>
+          <button onclick="reloadOrders()" class="btn-select" style="padding: 6px 14px; width: auto;">
+            <i class="fa-solid fa-rotate"></i> Refresh
+          </button>
+        </div>
+      </div>
+
+      <div id="ordersContainer">
+        {% for order in orders %}
+        <div class="order-item-wrap" data-status="{{ order.status }}" id="order-row-{{ order.id }}">
+          
+          <div class="order-header-row">
+            <div>
+              <span style="font-weight: 800; font-size: 1.1rem; color: var(--primary);">#{{ order.order_code }}</span>
+              <span style="font-size: 0.85rem; color: var(--text-muted); margin-left: 10px;">
+                <i class="fa-regular fa-clock"></i> {{ order.created_at }}
+              </span>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <select class="form-input" style="padding: 4px 10px; width: auto; font-size: 0.85rem; font-weight: 700;" onchange="updateOrderStatus('{{ order.id }}', this.value)">
+                <option value="NEW" {% if order.status == 'NEW' %}selected{% endif %}>NEW</option>
+                <option value="CONTACTED" {% if order.status == 'CONTACTED' %}selected{% endif %}>CONTACTED</option>
+                <option value="IN_PROGRESS" {% if order.status == 'IN_PROGRESS' %}selected{% endif %}>IN PROGRESS</option>
+                <option value="COMPLETED" {% if order.status == 'COMPLETED' %}selected{% endif %}>COMPLETED</option>
+              </select>
+
+              <!-- Direct WhatsApp Chat to Customer -->
+              <a href="https://wa.me/{{ order.customer_phone }}?text=Namaste%20{{ order.customer_name }}!%20This%20is%20{{ settings.business_name }}.%20I%20received%20your%20blouse%20order%20%23{{ order.order_code }}%20with%20your%20uploaded%20blouse%20photo%20and%20selected%20designs.%20Let's%20finalize%20the%20details!" 
+                 target="_blank" class="btn-header btn-whatsapp-header" style="padding: 6px 12px; font-size: 0.82rem;">
+                <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+              </a>
+
+              <a href="/order/{{ order.order_code }}" target="_blank" class="btn-select" style="padding: 6px 10px; width: auto; font-size: 0.82rem;" title="View Customer Receipt">
+                <i class="fa-solid fa-eye"></i> Receipt
+              </a>
+
+              <button onclick="deleteOrder('{{ order.id }}')" class="btn-select" style="padding: 6px 10px; width: auto; color: #C0392B; border-color: #C0392B;" title="Delete">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="order-grid-visual">
+            <!-- Customer Blouse Photo Box -->
+            <div class="admin-blouse-box">
+              <div style="font-size: 0.82rem; font-weight: 700; color: #6B1724; margin-bottom: 6px;">
+                CUSTOMER'S BLOUSE CLOTH
+              </div>
+              {% if order.blouse_image_path %}
+              <a href="/{{ order.blouse_image_path }}" target="_blank">
+                <img src="/{{ order.blouse_image_path }}" class="admin-blouse-img" alt="Blouse Material" title="Click to view full image">
+              </a>
+              <div style="margin-top: 6px;">
+                <a href="/{{ order.blouse_image_path }}" download="Blouse_{{ order.order_code }}.jpg" style="font-size: 0.75rem; color: var(--gold-dark); text-decoration: underline;">
+                  <i class="fa-solid fa-download"></i> Download Photo
+                </a>
+              </div>
+              {% else %}
+              <div style="padding: 40px 10px; color: #999; font-size: 0.85rem;">
+                <i class="fa-solid fa-image" style="font-size: 2rem; color: #DDD; margin-bottom: 6px;"></i>
+                <p>No blouse photo uploaded</p>
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- Customer Details & Selected Designs -->
+            <div>
+              <div style="display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 12px; font-size: 0.95rem;">
+                <div>
+                  <span style="color: var(--text-muted); font-size: 0.8rem; display: block;">CUSTOMER NAME</span>
+                  <strong>{{ order.customer_name }}</strong>
+                </div>
+                <div>
+                  <span style="color: var(--text-muted); font-size: 0.8rem; display: block;">PHONE / WHATSAPP</span>
+                  <strong>{{ order.customer_phone }}</strong>
+                </div>
+              </div>
+
+              {% if order.customer_notes %}
+              <div style="background: #FDFBF7; padding: 10px 12px; border-radius: 8px; border: 1px solid #EFE8DA; margin-bottom: 12px; font-size: 0.88rem;">
+                <strong style="color: var(--primary);">Notes / Instructions:</strong> {{ order.customer_notes }}
+              </div>
+              {% endif %}
+
+              <div style="font-size: 0.82rem; font-weight: 700; color: var(--primary); margin-bottom: 8px;">
+                SELECTED EMBROIDERY DESIGNS ({{ order.designs_detail|length }}):
+              </div>
+
+              <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 8px;">
+                {% for d in order.designs_detail %}
+                <div style="width: 100px; flex-shrink: 0; background: #FAF8F5; border: 1px solid #E5DFD3; border-radius: 8px; overflow: hidden; text-align: center;">
+                  <img src="/{{ d.thumb_path }}" alt="{{ d.code }}" style="width: 100%; height: 75px; object-fit: cover;">
+                  <div style="font-size: 0.72rem; font-weight: 700; padding: 4px 2px; color: #333;">{{ d.code }}</div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+        {% endfor %}
+
+        {% if not orders %}
+        <div style="text-align: center; padding: 60px 20px; background: #FFF; border-radius: 14px;">
+          <i class="fa-solid fa-inbox" style="font-size: 3rem; color: #D4AF37; margin-bottom: 12px;"></i>
+          <h3 style="color: var(--primary);">No customer orders yet</h3>
+          <p style="color: #665A5B; font-size: 0.9rem; margin-top: 6px;">
+            Share your catalog link on WhatsApp! As soon as customers select designs and upload blouse photos, they will appear here.
+          </p>
+        </div>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- TAB 2: UPLOAD DESIGNS (PDF / IMAGE) -->
+    <section id="uploadTab" class="admin-tab-content">
+      <div style="max-width: 800px; margin: 0 auto; background: #FFF; padding: 28px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm);">
+        <h2 style="font-size: 1.4rem; color: var(--primary); margin-bottom: 6px;" class="font-serif">Upload New Embroidery Designs</h2>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 22px;">
+          Upload <strong>PDF design catalogs</strong> or <strong>single/multiple images (JPG, PNG)</strong>. PDF pages are automatically converted into separate high-definition design cards!
+        </p>
+
+        <form id="uploadForm" onsubmit="submitDesignUpload(event)">
+          
+          <div class="form-group">
+            <label class="form-label">Select PDF or Design Image(s) <span class="req">*</span></label>
+            <div class="admin-dropzone" id="dropzone" onclick="document.getElementById('designFiles').click()">
+              <i class="fa-solid fa-cloud-arrow-up" style="font-size: 3rem; color: var(--gold-dark); margin-bottom: 12px;"></i>
+              <div style="font-size: 1.1rem; font-weight: 700; color: var(--primary);">
+                Click to browse files or Drag & Drop here
+              </div>
+              <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">
+                Supports <strong>.PDF</strong> (Multi-page catalogs extracted automatically), <strong>.JPG</strong>, <strong>.PNG</strong>, <strong>.WEBP</strong>
+              </div>
+              <input type="file" id="designFiles" multiple accept=".pdf,image/*" style="display: none;" onchange="handleFileSelection(event)">
+            </div>
+            <div id="fileSelectionList" style="margin-top: 10px; font-size: 0.85rem; color: var(--primary); font-weight: 600;"></div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label">Category <span class="req">*</span></label>
+              <select id="uploadCategory" class="form-input">
+                <option value="Maggam Work">Maggam Work</option>
+                <option value="Bridal Heavy">Bridal Heavy</option>
+                <option value="Aari Work">Aari Work</option>
+                <option value="Sleeve Design">Sleeve Design</option>
+                <option value="Cutwork">Cutwork</option>
+                <option value="Neck Design">Neck Design</option>
+                <option value="Simple Work">Simple Work</option>
+                <option value="Computer Embroidery">Computer Embroidery</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Design Code Prefix</label>
+              <input type="text" id="uploadCodePrefix" class="form-input" value="BL" placeholder="e.g. BL, MAG, AARI">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Design Title / Collection Name (Optional)</label>
+            <input type="text" id="uploadTitle" class="form-input" placeholder="e.g. Royal Peacock Maggam Blouse (Auto-named if left empty)">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Tags / Keywords (Comma separated)</label>
+            <input type="text" id="uploadTags" class="form-input" placeholder="e.g. peacock, maroon, gold zari, heavy bridal, wedding">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Description (Optional)</label>
+            <textarea id="uploadDescription" class="form-textarea" rows="2" placeholder="Fabric requirements, work details, stones used..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit-order" id="btnUploadSubmit">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <span>Upload and Process Designs</span>
+          </button>
+        </form>
+
+        <div id="uploadProgress" style="display: none; margin-top: 18px; text-align: center;">
+          <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary); margin-bottom: 8px;"></i>
+          <p style="font-weight: 600; color: var(--primary);">Processing files and generating high-resolution thumbnails...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: MANAGE CATALOG -->
+    <section id="designsTab" class="admin-tab-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+        <h2 style="font-size: 1.3rem; color: var(--primary);">Current Design Catalog</h2>
+        <button onclick="switchTab('uploadTab')" class="btn-proceed" style="padding: 8px 18px; font-size: 0.9rem;">
+          <i class="fa-solid fa-plus"></i> Add New Designs
+        </button>
+      </div>
+
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th style="width: 80px;">Image</th>
+            <th>Code</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Source</th>
+            <th style="width: 100px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="adminDesignsTableBody">
+          {% for d in designs %}
+          <tr id="design-row-{{ d.id }}">
+            <td>
+              <img src="/{{ d.thumb_path }}" alt="{{ d.code }}" style="width: 60px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #CCC;">
+            </td>
+            <td><strong>{{ d.code }}</strong></td>
+            <td>{{ d.title }}</td>
+            <td><span class="badge-pill" style="background: #F4E7BD; color: #6B1724;">{{ d.category }}</span></td>
+            <td style="font-size: 0.8rem; color: #665A5B;">
+              {% if d.pdf_source %}
+              <i class="fa-solid fa-file-pdf" style="color: #E74C3C;"></i> {{ d.pdf_source }} (p.{{ d.pdf_page }})
+              {% else %}
+              <i class="fa-solid fa-image" style="color: #2980B9;"></i> Upload
+              {% endif %}
+            </td>
+            <td>
+              <button onclick="deleteDesign('{{ d.id }}')" style="background: none; border: none; color: #C0392B; cursor: pointer; font-size: 1rem; padding: 4px 8px;" title="Delete Design">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- TAB 4: WHATSAPP SHARE & QR CODE -->
+    <section id="shareTab" class="admin-tab-content">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        
+        <!-- WhatsApp Share Box -->
+        <div style="background: #FFF; padding: 24px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm);">
+          <h2 style="font-size: 1.25rem; color: var(--primary); margin-bottom: 12px;">
+            <i class="fa-brands fa-whatsapp" style="color: var(--whatsapp-green);"></i> Share Catalog with Customers
+          </h2>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;">
+            When a customer asks on WhatsApp: <em>"Send me your latest blouse designs"</em>, copy this link and send it immediately! Your phone storage will never get full.
+          </p>
+
+          <div class="form-group">
+            <label class="form-label">Customer Catalog Web Link:</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="shareCatalogUrl" class="form-input" value="{{ base_url }}/" readonly>
+              <button onclick="copyCatalogLink()" class="btn-select" style="width: auto; padding: 0 16px;">
+                <i class="fa-solid fa-copy"></i> Copy
+              </button>
+            </div>
+          </div>
+
+          <div style="margin-top: 18px;">
+            <label class="form-label">Instant WhatsApp Message Template:</label>
+            <div style="background: #FAF8F5; border: 1px solid #EAE3D5; border-radius: 10px; padding: 14px; font-size: 0.85rem; line-height: 1.5; color: #333;">
+              Namaste! 🙏<br>
+              Browse our latest <strong>Blouse Embroidery & Maggam Work</strong> designs here:<br>
+              👉 <span id="templateLinkText" style="color: #6B1724; font-weight: 700;">{{ base_url }}/</span><br><br>
+              You can choose your favorite designs, upload a photo of your blouse cloth/saree, and submit! We will craft the matching embroidery. ✨
+            </div>
+            <button onclick="shareViaWhatsAppNative()" class="btn-whatsapp-send" style="margin-top: 14px; padding: 10px 18px; font-size: 0.95rem;">
+              <i class="fa-brands fa-whatsapp"></i> Share Directly to WhatsApp
+            </button>
+          </div>
+        </div>
+
+        <!-- QR Code Studio -->
+        <div style="background: #FFF; padding: 24px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); text-align: center;">
+          <h2 style="font-size: 1.25rem; color: var(--primary); margin-bottom: 8px;">
+            <i class="fa-solid fa-qrcode"></i> Shop Counter QR Code
+          </h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+            Print and keep this QR code on your boutique counter so visiting customers can scan and view all designs on their phones!
+          </p>
+
+          <div style="padding: 16px; background: #FAF7F0; display: inline-block; border-radius: 14px; border: 2px solid #D4AF37;">
+            <img id="qrCodeImg" src="/api/qr" alt="Catalog QR Code" style="width: 180px; height: 180px; display: block;">
+          </div>
+
+          <div style="margin-top: 16px;">
+            <a href="/api/qr" download="Chakri_Boutique_QR.png" class="btn-proceed" style="padding: 10px 20px; font-size: 0.9rem; text-decoration: none;">
+              <i class="fa-solid fa-download"></i> Download QR Code Image
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 5: SETTINGS & GOOGLE DRIVE -->
+    <section id="settingsTab" class="admin-tab-content">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        
+        <!-- Boutique Profile Settings -->
+        <div style="background: #FFF; padding: 24px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm);">
+          <h2 style="font-size: 1.25rem; color: var(--primary); margin-bottom: 16px;">
+            <i class="fa-solid fa-sliders"></i> Boutique Details & Contacts
+          </h2>
+
+          <form onsubmit="saveBoutiqueSettings(event)">
+            <div class="form-group">
+              <label class="form-label">Business Name</label>
+              <input type="text" id="settingBizName" class="form-input" value="{{ settings.business_name }}" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Tagline / Subtitle</label>
+              <input type="text" id="settingTagline" class="form-input" value="{{ settings.tagline }}">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Owner WhatsApp Number (with country code e.g. 919876543210)</label>
+              <input type="text" id="settingWhatsApp" class="form-input" value="{{ settings.whatsapp_number }}" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Public Website URL (Optional / e.g. ngrok / cloudflared / domain)</label>
+              <input type="text" id="settingPublicUrl" class="form-input" value="{{ settings.public_url }}" placeholder="https://your-custom-domain.com">
+            </div>
+
+            <button type="submit" class="btn-submit-order" id="btnSaveSettings">
+              <i class="fa-solid fa-floppy-disk"></i> Save Settings
+            </button>
+          </form>
+        </div>
+
+        <!-- Google Drive Cloud Backup -->
+        <div style="background: #FFF; padding: 24px; border-radius: 16px; border: 1px solid var(--border-light); box-shadow: var(--shadow-sm);">
+          <h2 style="font-size: 1.25rem; color: #1A73E8; margin-bottom: 12px;">
+            <i class="fa-brands fa-google-drive"></i> Google Drive & Backup Center
+          </h2>
+          
+          <div style="background: #E8F0FE; border: 1px solid #B7D1F7; border-radius: 10px; padding: 14px; margin-bottom: 16px; font-size: 0.88rem; color: #174EA6;">
+            <strong>Google Account:</strong> {{ gdrive_status.account_email }}<br>
+            <strong>Local Storage:</strong> All designs & customer blouses are permanently saved on your computer in <code>uploads/</code>.
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <h3 style="font-size: 1rem; color: var(--primary); margin-bottom: 6px;">1-Click Full Backup (ZIP Archive)</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+              Download a complete archive containing all your high-res design photos, customer blouse photos, original PDFs, and database with 1 click. You can save it to your Google Drive or any USB drive!
+            </p>
+            <a href="/api/backup/download" class="btn-proceed" style="text-decoration: none; display: inline-flex;">
+              <i class="fa-solid fa-download"></i> Download Full Backup ZIP
+            </a>
+          </div>
+
+          <div style="border-top: 1px solid #EFE8DA; padding-top: 16px;">
+            <h3 style="font-size: 1rem; color: #2D2324; margin-bottom: 6px;">Automated Google Drive API Sync</h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">
+              For security, Google prevents applications from logging in with raw passwords. To enable automatic background sync, place a Google Cloud <code>service_account.json</code> file in the app directory.
+            </p>
+            <div style="margin-top: 10px; font-size: 0.82rem; color: #555;">
+              Status: {% if gdrive_status.service_account_configured %}<span style="color: #27AE60; font-weight: 700;">Configured</span>{% else %}<span style="color: #E67E22; font-weight: 700;">Manual ZIP Backup Available</span>{% endif %}
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Pass Config to JS -->
+  <script>
+    window.ADMIN_CONFIG = {
+      defaultPin: "{{ settings.admin_pin }}",
+      baseUrl: "{{ base_url }}"
+    };
+  </script>
+  <script src="/static/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Receipt #{{ order.order_code }} - {{ settings.business_name }}</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+
+  <style>
+    body {
+      background-color: #F8F5EE;
+      padding: 20px 10px 60px 10px;
+    }
+    .receipt-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #FFFFFF;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(74, 14, 23, 0.12);
+      border: 2px solid #D4AF37;
+      overflow: hidden;
+    }
+    .receipt-header {
+      background: linear-gradient(135deg, #58111D 0%, #751928 100%);
+      color: #FFFDF9;
+      padding: 24px;
+      text-align: center;
+      border-bottom: 2px solid #D4AF37;
+    }
+    .receipt-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #FFF;
+      margin-bottom: 4px;
+    }
+    .receipt-meta {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      background: #FAF7F0;
+      padding: 16px 24px;
+      border-bottom: 1px solid #EFE8DA;
+      font-size: 0.9rem;
+    }
+    .receipt-section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #6B1724;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .visual-comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin: 20px 0;
+    }
+    @media (max-width: 650px) {
+      .visual-comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .blouse-box {
+      background: #FAF8F5;
+      border: 1.5px solid #D4AF37;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+    .blouse-img-large {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-top: 10px;
+      border: 1px solid #DDD;
+    }
+    .designs-selection-box {
+      background: #FAF8F5;
+      border: 1.5px solid #E5DFD3;
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .design-mini-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #EAE3D5;
+    }
+    .design-mini-row:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .design-mini-img {
+      width: 65px;
+      height: 65px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 1px solid #CCC;
+    }
+    .screenshot-banner {
+      background: #FFF9E6;
+      border: 1px dashed #D4AF37;
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin: 18px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: #664D03;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="receipt-container">
+    
+    <!-- Receipt Header -->
+    <div class="receipt-header">
+      <div style="font-size: 1.8rem; color: #D4AF37; margin-bottom: 6px;">
+        <i class="fa-solid fa-gem"></i>
+      </div>
+      <h1 class="receipt-title font-serif">{{ settings.business_name }}</h1>
+      <p style="color: #F4E7BD; font-size: 0.88rem;">{{ settings.tagline }}</p>
+    </div>
+
+    <!-- Meta Details -->
+    <div class="receipt-meta">
+      <div>
+        <div style="color: #665A5B; font-size: 0.8rem;">ORDER REFERENCE</div>
+        <div style="font-size: 1.1rem; font-weight: 800; color: #6B1724;">#{{ order.order_code }}</div>
+      </div>
+      <div>
+        <div style="color: #665A5B; font-size: 0.8rem;">CUSTOMER NAME</div>
+        <div style="font-size: 1rem; font-weight: 700; color: #2D2324;">{{ order.customer_name }}</div>
+      </div>
+      <div>
+        <div style="color: #665A5B; font-size: 0.8rem;">PHONE / WHATSAPP</div>
+        <div style="font-size: 1rem; font-weight: 700; color: #2D2324;">{{ order.customer_phone }}</div>
+      </div>
+      <div>
+        <div style="color: #665A5B; font-size: 0.8rem;">STATUS</div>
+        <span class="order-status-badge status-{{ order.status }}">{{ order.status }}</span>
+      </div>
+    </div>
+
+    <div style="padding: 24px;">
+
+      <!-- Screenshot Hint Banner -->
+      <div class="screenshot-banner">
+        <i class="fa-solid fa-camera" style="font-size: 1.4rem;"></i>
+        <div>
+          <strong>Customer Screenshot Card:</strong> You can take a screenshot of this page on your phone anytime and share it back to us!
+        </div>
+      </div>
+
+      <!-- Side-by-Side Visual Comparison -->
+      <div class="visual-comparison-grid">
+        
+        <!-- Left Column: Customer Blouse Material -->
+        <div class="blouse-box">
+          <div class="receipt-section-title" style="justify-content: center;">
+            <i class="fa-solid fa-vest"></i> Your Blouse Cloth / Saree
+          </div>
+          {% if order.blouse_image_path %}
+          <img src="/{{ order.blouse_image_path }}" class="blouse-img-large" alt="Customer Blouse Material">
+          <div style="margin-top: 8px; font-size: 0.8rem; color: #665A5B;">
+            Tailor can match exact thread and zari colors to this fabric
+          </div>
+          {% else %}
+          <div style="padding: 40px 10px; color: #888;">
+            <i class="fa-solid fa-image" style="font-size: 2.5rem; margin-bottom: 8px; color: #CCC;"></i>
+            <p>No blouse image was uploaded</p>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Right Column: Selected Embroidery Designs -->
+        <div class="designs-selection-box">
+          <div class="receipt-section-title">
+            <i class="fa-solid fa-heart"></i> Selected Embroidery Designs ({{ designs|length }})
+          </div>
+
+          {% for d in designs %}
+          <div class="design-mini-row">
+            <img src="/{{ d.thumb_path }}" alt="{{ d.title }}" class="design-mini-img">
+            <div>
+              <span class="badge-code" style="position: static; font-size: 0.72rem; display: inline-block;">{{ d.code }}</span>
+              <div style="font-weight: 700; font-size: 0.92rem; color: #2D2324; margin-top: 2px;">{{ d.title }}</div>
+              <div style="font-size: 0.78rem; color: #8C6D23; font-weight: 600;">{{ d.category }}</div>
+            </div>
+          </div>
+          {% endfor %}
+
+          {% if not designs %}
+          <p style="color: #888; font-size: 0.9rem;">No designs recorded</p>
+          {% endif %}
+        </div>
+
+      </div>
+
+      <!-- Customer Notes -->
+      {% if order.customer_notes %}
+      <div style="background: #FDFBF7; border: 1px solid #EAE3D5; border-radius: 10px; padding: 14px; margin-top: 14px;">
+        <div style="font-size: 0.85rem; font-weight: 700; color: #6B1724; margin-bottom: 4px;">CUSTOMER INSTRUCTIONS:</div>
+        <p style="font-size: 0.92rem; color: #443B3C;">{{ order.customer_notes }}</p>
+      </div>
+      {% endif %}
+
+      <!-- Action Buttons -->
+      <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 10px;">
+        {% if settings.whatsapp_number %}
+        <a href="https://wa.me/{{ settings.whatsapp_number }}?text=Hello!%20Here%20is%20my%20blouse%20order%20selection%20%23{{ order.order_code }}%20(Customer:%20{{ order.customer_name }})%20Link:%20{{ base_url }}/order/{{ order.order_code }}" 
+           target="_blank" class="btn-whatsapp-send">
+          <i class="fa-brands fa-whatsapp"></i>
+          <span>Send this Order via WhatsApp</span>
+        </a>
+        {% endif %}
+
+        <a href="/" class="btn-select" style="text-decoration: none; padding: 12px; text-align: center;">
+          <i class="fa-solid fa-arrow-left"></i> Return to Design Catalog
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Receipt Footer -->
+    <div style="background: #FAF7F0; padding: 16px; text-align: center; font-size: 0.8rem; color: #776D6E; border-top: 1px solid #EFE8DA;">
+      {{ settings.business_name }} &bull; Handcrafted Quality &bull; Thank you for choosing us!
+    </div>
+
+  </div>
+
+</body>
+</html>

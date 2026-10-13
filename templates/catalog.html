@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>{{ settings.business_name }} - Blouse Embroidery Designs</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- Tailor Quick Action Bar -->
+  <div style="background: #3B0810; color: #F4E7BD; padding: 10px 0; border-bottom: 2px solid var(--gold); font-size: 0.88rem; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="background: var(--gold-gradient); color: #3B0810; font-weight: 800; font-size: 0.75rem; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.5px;">TAILOR TOOLBAR</span>
+        <span style="color: #FFF; font-weight: 500;">Quick Owner Actions:</span>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+        <!-- 1. COPY LINK FOR CUSTOMER -->
+        <button onclick="copyCustomerCatalogUrl()" style="background: var(--gold-gradient); color: #381A05; border: none; padding: 7px 14px; border-radius: 20px; font-weight: 700; font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+          <i class="fa-solid fa-copy"></i> Copy Link for Customer
+        </button>
+
+        <!-- 2. SHARE DIRECT TO WHATSAPP -->
+        <button onclick="shareDirectWhatsApp()" style="background: #25D366; color: #FFF; border: none; padding: 7px 14px; border-radius: 20px; font-weight: 700; font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-brands fa-whatsapp"></i> Share on WhatsApp
+        </button>
+
+        <!-- 3. UPLOAD NEW DESIGNS -->
+        <a href="/admin#uploadTab" style="background: rgba(255,255,255,0.15); color: #FFF; border: 1px solid rgba(212,175,55,0.5); text-decoration: none; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.82rem; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-cloud-arrow-up"></i> Upload New Designs (PDF)
+        </a>
+
+        <!-- 4. VIEW ORDERS -->
+        <a href="/admin#ordersTab" style="background: rgba(255,255,255,0.15); color: #FFF; border: 1px solid rgba(212,175,55,0.5); text-decoration: none; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.82rem; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-inbox"></i> Customer Orders
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boutique Top Header -->
+  <header class="boutique-header">
+    <div class="container">
+      <div class="header-top">
+        <div class="brand-wrapper">
+          <div class="brand-icon">
+            <i class="fa-solid fa-gem"></i>
+          </div>
+          <div>
+            <h1 class="brand-name">{{ settings.business_name }}</h1>
+            <p class="brand-tagline">{{ settings.tagline }}</p>
+          </div>
+        </div>
+        
+        <div class="header-actions">
+          {% if settings.whatsapp_number %}
+          <a href="https://wa.me/{{ settings.whatsapp_number }}?text=Hello!%20I%20want%20to%20inquire%20about%20blouse%20embroidery%20designs" 
+             target="_blank" class="btn-header btn-whatsapp-header">
+            <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+          </a>
+          {% endif %}
+          <a href="/admin" class="btn-header btn-admin-header">
+            <i class="fa-solid fa-lock"></i> Tailor Dashboard
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Filter & Search Bar -->
+  <section class="filter-section">
+    <div class="container">
+      <!-- Search Input -->
+      <div class="search-box-wrapper">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search by design code (e.g. BL-101), peacock, lotus, sleeve..." autocomplete="off">
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="category-scroll" id="categoryContainer">
+        {% for cat in categories %}
+        <div class="cat-pill {% if cat == current_category %}active{% endif %}" data-category="{{ cat }}">
+          {{ cat }}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Design Catalog Grid -->
+  <main class="container">
+    <div class="catalog-grid" id="catalogGrid">
+      {% for design in designs %}
+      <div class="design-card" 
+           data-id="{{ design.id }}" 
+           data-code="{{ design.code }}" 
+           data-title="{{ design.title }}" 
+           data-category="{{ design.category }}" 
+           data-tags="{{ design.tags }}"
+           data-image="/{{ design.image_path }}"
+           data-thumb="/{{ design.thumb_path }}">
+        
+        <div class="card-image-wrap" onclick="openZoomModal('{{ design.id }}')">
+          <img src="/{{ design.thumb_path }}" alt="{{ design.title }}" class="card-img" loading="lazy">
+          <span class="badge-code">{{ design.code }}</span>
+          <span class="zoom-hint"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></span>
+        </div>
+
+        <div class="card-content">
+          <div>
+            <div class="card-category">{{ design.category }}</div>
+            <h3 class="card-title">{{ design.title }}</h3>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-select" onclick="toggleSelectDesign('{{ design.id }}')">
+              <i class="fa-regular fa-heart select-icon"></i>
+              <span class="select-text">Select Design</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Empty State -->
+    <div id="noResults" style="display: none; text-align: center; padding: 60px 20px;">
+      <i class="fa-solid fa-magnifying-glass" style="font-size: 3rem; color: #D4AF37; margin-bottom: 14px;"></i>
+      <h3 style="font-size: 1.2rem; color: #6B1724;">No matching embroidery designs found</h3>
+      <p style="color: #665A5B; margin-top: 6px;">Try searching with different keywords or select "All" categories.</p>
+    </div>
+  </main>
+
+  <!-- Sticky Bottom Floating Bar (When designs are selected) -->
+  <div class="floating-order-bar" id="floatingOrderBar">
+    <div class="order-bar-content">
+      <div class="order-bar-info">
+        <div class="selected-count-badge" id="selectedCountBadge">0</div>
+        <div>
+          <div class="order-bar-title">Designs Selected</div>
+          <div class="order-bar-sub">Ready to match with your blouse</div>
+        </div>
+      </div>
+      <button class="btn-proceed" onclick="openOrderModal()">
+        <span>Upload Blouse & Order</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal: Order Submission & Blouse Upload -->
+  <div class="modal-overlay" id="orderModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title font-serif">Complete Blouse Order Request</h2>
+        <button class="btn-modal-close" onclick="closeOrderModal()">&times;</button>
+      </div>
+
+      <div class="modal-body" id="modalFormContainer">
+        <!-- Selected designs mini list -->
+        <label class="form-label">Your Selected Designs:</label>
+        <div class="selected-mini-grid" id="modalSelectedGrid"></div>
+
+        <form id="orderForm" onsubmit="submitCustomerOrder(event)">
+          <div class="form-group">
+            <label class="form-label" for="custName">Your Name <span class="req">*</span></label>
+            <input type="text" id="custName" class="form-input" placeholder="e.g. Priya Sharma" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="custPhone">WhatsApp / Phone Number <span class="req">*</span></label>
+            <input type="tel" id="custPhone" class="form-input" placeholder="e.g. 9876543210" required>
+          </div>
+
+          <!-- Blouse Material Upload Zone -->
+          <div class="form-group">
+            <label class="form-label">Upload Your Blouse Fabric / Saree Photo (Recommended):</label>
+            <div class="blouse-upload-zone" onclick="document.getElementById('blouseFileInput').click()">
+              <i class="fa-solid fa-camera upload-icon"></i>
+              <div class="upload-text">Take Photo or Upload Blouse Cloth</div>
+              <div class="upload-hint">Upload your fabric or saree border so we can match the exact embroidery thread & zari colors!</div>
+              <input type="file" id="blouseFileInput" accept="image/*" style="display: none;" onchange="previewBlouseImage(event)">
+            </div>
+            
+            <div class="blouse-preview-wrap" id="blousePreviewWrap">
+              <img id="blousePreviewImg" class="blouse-preview-img" alt="Blouse fabric preview">
+              <button type="button" class="btn-remove-preview" onclick="removeBlousePreview()">&times;</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="custNotes">Special Instructions / Requirements (Optional):</label>
+            <textarea id="custNotes" class="form-textarea" rows="2" placeholder="e.g. Deep back neck, elbow length sleeve, wedding on 25th Nov, need quotation..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit-order" id="btnSubmitOrder">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Submit Design Selection</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Success Card (Shown after submission) -->
+      <div class="modal-body" id="modalSuccessContainer" style="display: none;">
+        <div class="success-card">
+          <i class="fa-solid fa-circle-check success-icon"></i>
+          <h2 class="success-title">Order Request Received!</h2>
+          <p style="color: #665A5B; font-size: 0.95rem;">
+            Your design choices and blouse details have been safely registered with the boutique.
+          </p>
+
+          <div class="order-code-badge" id="successOrderCode">ORD-12345</div>
+
+          <!-- Direct WhatsApp Button -->
+          <div class="whatsapp-action-box">
+            <p style="font-size: 0.92rem; color: #1E4620; font-weight: 600; margin-bottom: 12px;">
+              <i class="fa-brands fa-whatsapp" style="color: #25D366; font-size: 1.2rem;"></i>
+              Send directly to tailor on WhatsApp with 1 click:
+            </p>
+            <a href="#" id="btnWhatsAppDirect" target="_blank" class="btn-whatsapp-send">
+              <i class="fa-brands fa-whatsapp"></i>
+              <span>Send Selection to Tailor on WhatsApp</span>
+            </a>
+          </div>
+
+          <!-- Screenshot / Visual Summary Button -->
+          <div style="margin-top: 14px;">
+            <a href="#" id="btnViewReceipt" class="btn-screenshot-view" target="_blank">
+              <i class="fa-solid fa-image"></i>
+              <span>View Full Order Card & Take Screenshot</span>
+            </a>
+          </div>
+
+          <div style="margin-top: 20px;">
+            <button class="btn-select" style="max-width: 200px; margin: 0 auto;" onclick="resetOrderModal()">
+              Browse More Designs
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal: High-Res Image Zoom Modal -->
+  <div class="modal-overlay" id="zoomModal">
+    <div class="modal-card image-zoom-card">
+      <div class="zoom-image-wrapper">
+        <button class="btn-modal-close" style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); color: #fff; z-index: 10;" onclick="closeZoomModal()">&times;</button>
+        <img id="zoomModalImg" src="" alt="Embroidery Design Preview">
+      </div>
+      <div class="zoom-details-bar">
+        <div>
+          <span class="badge-code" id="zoomModalCode" style="position: static; margin-bottom: 4px; display: inline-block;">BL-101</span>
+          <h3 id="zoomModalTitle" style="font-size: 1.1rem; color: #4A0E17; font-weight: 700;">Design Title</h3>
+          <p id="zoomModalDesc" style="font-size: 0.85rem; color: #665A5B; margin-top: 2px;">Design details</p>
+        </div>
+        <button id="zoomModalSelectBtn" class="btn-proceed" style="padding: 10px 20px;">
+          <i class="fa-solid fa-heart"></i>
+          <span>Select This Design</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pass Config to JS -->
+  <script>
+    window.BOUTIQUE_CONFIG = {
+      whatsappNumber: "{{ settings.whatsapp_number }}",
+      businessName: "{{ settings.business_name }}",
+      baseUrl: "{{ base_url }}"
+    };
+  </script>
+  
+  <!-- JavaScript Logic -->
+  <script src="/static/js/catalog.js"></script>
+</body>
+</html>

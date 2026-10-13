@@ -1,0 +1,17 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment & credentials
+.env
+service_account.json
+
+# Temporary backups
+backups/*.zip
+
+# IDE & OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
